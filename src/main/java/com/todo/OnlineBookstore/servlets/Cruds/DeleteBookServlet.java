@@ -1,8 +1,11 @@
-package com.todo.OnlineBookstore.servlets.bookCrud;
+package com.todo.OnlineBookstore.servlets.Cruds;
 
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
@@ -10,9 +13,7 @@ import com.todo.OnlineBookstore.db.DBConnectionManager;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
-import jakarta.servlet.http.HttpServlet;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
+
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.context.support.SpringBeanAutowiringSupport;
@@ -42,7 +43,7 @@ public class DeleteBookServlet extends HttpServlet {
         if (idStr == null || idStr.isEmpty()) {
             out.println("<html><body>");
             out.println("<h3>Error: 'id' parameter is missing.</h3>");
-            out.println("<p><a href=\"index.html\"> <= To Home</a></p>");
+            out.println("<p><a href=\"index.html\"> Go back</a></p>");
             out.println("</body></html>");
             return;
         }
@@ -76,7 +77,7 @@ public class DeleteBookServlet extends HttpServlet {
         } catch (NumberFormatException e) {
             out.println("<html><body>");
             out.println("<h3>Error: 'id' parameter must be a valid integer.</h3>");
-            out.println("<p><a href=\"index.html\"> <= To Home</a></p>");
+            out.println("<p><a href=\"index.html\"> Go back</a></p>");
             out.println("</body></html>");
         } catch (SQLException e) {
             throw new ServletException("Error deleting Book", e);

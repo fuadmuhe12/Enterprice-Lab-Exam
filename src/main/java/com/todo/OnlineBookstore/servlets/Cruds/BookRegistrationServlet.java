@@ -1,9 +1,8 @@
-package com.todo.OnlineBookstore.servlets.bookCrud;
+package com.todo.OnlineBookstore.servlets.Cruds;
 
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
@@ -67,7 +66,7 @@ public class BookRegistrationServlet extends HttpServlet {
             if (rowsInserted > 0) {
                 out.println("<html><body>");
                 out.println("<h3>Book created successfully!</h3>");
-                out.println("<p><a href=\"index.html\"> <= To Home</a></p>");
+                out.println("<p><a href=\"index.html\"> Go back</a></p>");
                 out.println("</body></html>");
             }
 
@@ -75,7 +74,7 @@ public class BookRegistrationServlet extends HttpServlet {
             e.printStackTrace();
             out.println("<html><body>");
             out.println("<h3>Error creating Book: " + e.getMessage() + "</h3>");
-            out.println("<p><a href=\"index.html\"> <= To Home</a></p>");
+            out.println("<p><a href=\"index.html\"> Go back</a></p>");
             out.println("</body></html>");
         } finally {
             try {

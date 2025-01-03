@@ -1,20 +1,21 @@
-package com.todo.OnlineBookstore.servlets.bookCrud;
+package com.todo.OnlineBookstore.servlets.Cruds;
 
+import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
+import java.sql.Connection;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.sql.Connection;
-import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import jakarta.servlet.http.HttpServlet;
+
+
 import java.sql.Statement;
 
 import com.todo.OnlineBookstore.db.DBConnectionManager;
 
-import jakarta.servlet.ServletException;
-import jakarta.servlet.annotation.WebServlet;
-import jakarta.servlet.http.HttpServlet;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.context.support.SpringBeanAutowiringSupport;
@@ -91,7 +92,7 @@ public class DisplayBooksServlet extends HttpServlet {
             stmt.close();
 
             out.println("</table>");
-            out.println("<p><a href=\"index.html\"> <= To Home</a></p>");
+            out.println("<p class='back'><a href=\"index.html\"  > Go back</a></p>");
             out.println("</body></html>");
 
         } catch (SQLException e) {

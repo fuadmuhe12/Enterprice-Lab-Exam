@@ -1,13 +1,16 @@
+// Fuad Mohammed Obsa
+
 package com.todo.OnlineBookstore;
 
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.servlet.ServletComponentScan;
 import org.springframework.context.annotation.ImportResource;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
 
 @SpringBootApplication
-@ServletComponentScan // Enables scanning for @WebServlet annotations
-@ImportResource("classpath:applicationContext.xml") // Loads XML-based beans
+@ServletComponentScan 
+@ImportResource("classpath:applicationContext.xml") 
 public class TodoTestApplication {
 
 	public static void main(String[] args) {

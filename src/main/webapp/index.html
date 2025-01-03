@@ -6,80 +6,126 @@
     <style>
         body {
             font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
             margin: 0;
             padding: 0;
-            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+
         }
 
         h1 {
-            color: #333;
             margin-top: 50px;
+            color: #3e2626;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
         }
 
         form {
-            margin-top: 50px;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            width: 300px;
+            margin-top: 30px;
         }
 
-        input[type="text"] {
-            padding: 5px;
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        input[type="text"],
+        input[type="number"] {
+            width: 100%;
+            padding: 8px 12px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+            transition: border-color 0.3s;
+        }
+
+        input[type="text"]:focus,
+        input[type="number"]:focus {
+            border-color: #2ebf91;
+            outline: none;
         }
 
         input[type="submit"] {
-            padding: 5px;
-            background-color: #333;
-            color: #fff;
+            width: 100%;
+            padding: 10px;
+            background-color: #2ebf91;
             border: none;
+            border-radius: 4px;
+            color: #fff;
+            font-size: 16px;
             cursor: pointer;
+            transition: background-color 0.3s;
         }
 
         input[type="submit"]:hover {
-            background-color: #444;
+            background-color: #279a7f;
         }
 
-        a {
+        .view-books {
+            margin-top: 40px;
+            text-align: center;
+        }
+
+        .view-books a {
             text-decoration: none;
-            color: #333;
-            padding: 5px;
-            border: 1px solid #333;
+            color: #2ebf91;
+            font-size: 18px;
+            padding: 10px 20px;
+            border: 2px solid #2ebf91;
+            border-radius: 4px;
+            transition: background-color 0.3s, color 0.3s;
         }
 
-        a:hover {
-            background-color: #333;
+        .view-books a:hover {
+            background-color: #2ebf91;
             color: #fff;
         }
 
+        @media (max-width: 600px) {
+            form {
+                width: 90%;
+            }
+
+            .view-books a {
+                display: block;
+                margin: 0 auto;
+                width: 80%;
+            }
+        }
     </style>
 </head>
 
 <body>
-   <h1>Welcome to book store</h1>
-
-    <!-- 
-    public class book {
-    private int id;
-    private String title;
-    private String author;
-    private double price;
-}
- -->
+    <h1>Welcome to Book Store</h1>
     <form method="POST" action="createBook">
 
-        <label for="title">title:</label>
-        <input type="text" name="title" id="title" required /><br><br>
+        <label for="title">Title:</label>
+        <input type="text" name="title" id="title" required />
 
-        <label for="author">author:</label>
-        <input type="text" name="author" id="author" required /><br><br>
+        <label for="author">Author:</label>
+        <input type="text" name="author" id="author" required />
 
-        <label for="price">price:</label>
-        <input type="number" name="price" id="price" required /><br><br>
+        <label for="price">Price:</label>
+        <input type="number" name="price" id="price" required />
 
         <input type="submit" value="Create a Book" />
     </form>
 
-    <br /><br />
-
-    <h3>View Books</h3>
-    <a href="viewBooks">View All Books</a>
+    <div class="view-books">
+        <h3>View Books</h3>
+        <a href="viewBooks">View All Books</a>
+    </div>
 </body>
 
 </html>
