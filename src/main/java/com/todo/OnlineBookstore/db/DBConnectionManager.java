@@ -15,7 +15,7 @@ public class DBConnectionManager {
 
     private String url = "jdbc:mysql://localhost:3306/BookstoreDB";
     private String username = "root";
-    private String password = "fuad"; // double-check that your MySQL user/pw is correct
+    private String password = "fuad"; 
 
     private Connection connection;
 
