@@ -35,7 +35,7 @@ public class BookRegistrationServlet extends HttpServlet {
 
         String title = request.getParameter("title");
         String author = request.getParameter("author");
-        String priceStr = request.getParameter("price"); // Ensure consistency with form
+        String priceStr = request.getParameter("price");
 
         Double price = null;
         if (priceStr != null && !priceStr.isEmpty()) {
