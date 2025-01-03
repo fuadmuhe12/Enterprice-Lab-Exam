@@ -27,21 +27,12 @@ public class BookRegistrationServlet extends HttpServlet {
     @Override
     public void init() throws ServletException {
         super.init();
-        // Enable Spring's dependency injection in this servlet
         SpringBeanAutowiringSupport.processInjectionBasedOnCurrentContext(this);
     }
 
 @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-                /*
-                 * public class book {
-                 * private int id;
-                 * private String title;
-                 * private String author;
-                 * private double price;
-                 * }
-                 */
 
         String title = request.getParameter("title");
         String author = request.getParameter("author");
@@ -76,7 +67,7 @@ public class BookRegistrationServlet extends HttpServlet {
             if (rowsInserted > 0) {
                 out.println("<html><body>");
                 out.println("<h3>Book created successfully!</h3>");
-                out.println("<p><a href=\"index.html\">Go Back</a></p>");
+                out.println("<p><a href=\"index.html\"> <= To Home</a></p>");
                 out.println("</body></html>");
             }
 
@@ -84,7 +75,7 @@ public class BookRegistrationServlet extends HttpServlet {
             e.printStackTrace();
             out.println("<html><body>");
             out.println("<h3>Error creating Book: " + e.getMessage() + "</h3>");
-            out.println("<p><a href=\"index.html\">Go Back</a></p>");
+            out.println("<p><a href=\"index.html\"> <= To Home</a></p>");
             out.println("</body></html>");
         } finally {
             try {

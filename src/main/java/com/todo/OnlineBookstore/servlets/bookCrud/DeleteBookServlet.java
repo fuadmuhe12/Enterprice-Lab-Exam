@@ -42,7 +42,7 @@ public class DeleteBookServlet extends HttpServlet {
         if (idStr == null || idStr.isEmpty()) {
             out.println("<html><body>");
             out.println("<h3>Error: 'id' parameter is missing.</h3>");
-            out.println("<p><a href=\"index.html\">Go Back</a></p>");
+            out.println("<p><a href=\"index.html\"> <= To Home</a></p>");
             out.println("</body></html>");
             return;
         }
@@ -76,7 +76,7 @@ public class DeleteBookServlet extends HttpServlet {
         } catch (NumberFormatException e) {
             out.println("<html><body>");
             out.println("<h3>Error: 'id' parameter must be a valid integer.</h3>");
-            out.println("<p><a href=\"index.html\">Go Back</a></p>");
+            out.println("<p><a href=\"index.html\"> <= To Home</a></p>");
             out.println("</body></html>");
         } catch (SQLException e) {
             throw new ServletException("Error deleting Book", e);

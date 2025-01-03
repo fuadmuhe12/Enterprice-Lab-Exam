@@ -23,45 +23,56 @@ import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 public class DisplayBooksServlet extends HttpServlet {
 
     @Autowired
-    private DBConnectionManager dbManager; // this is the bean name in applicationContext.xml
-
+    private DBConnectionManager dbManager;
     @Override
-    public void init() throws ServletException { // this method is called so that Spring can inject the
-                                                 // DBConnectionManager bean
+    public void init() throws ServletException {
         super.init();
-        // Enable Spring's dependency injection in this servlet
         SpringBeanAutowiringSupport.processInjectionBasedOnCurrentContext(this);
     }
 
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) // this method is called when the
-                                                                                   // servlet is accessed via a GET
-                                                                                   // request
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) 
+                                                                                 
             throws ServletException, IOException {
 
         response.setContentType("text/html"); // set the response content type to HTML of the response
         PrintWriter out = response.getWriter();
 
-        out.println("<html><body>");
+        out.println("<html>");
+        out.println("<head>");
+        out.println("<style>");
+        out.println("body { font-family: Arial, sans-serif; background-color: #f4f4f4; margin: 0; padding: 0; }");
+        out.println("h2 { color: #333; margin: 16px; text-align: center; }");
+        out.println("table { border-collapse: collapse; margin: 20px auto; width: 80%; }");
+        out.println("th, td { border: 1px solid #ddd; padding: 8px; }");
+        out.println("th { background-color: #f2f2f2; }");
+        out.println("tr:nth-child(even) { background-color: #f9f9f9; }");
+        out.println("form { text-align: center; margin: 20px; }");
+        out.println("input[type='text'] { padding: 5px; }");
+        out.println("input[type='submit'] { padding: 5px 10px; background-color: #4CAF50; border: none; color: white; cursor: pointer; }");
+        out.println("</style>");
+        out.println("</head>");
+        out.println("<body>");
         out.println("<h2>All Books are here</h2>");
+        out.println("<form action='viewBooks' method='GET'>");
+        out.println("Search by Title: <input type='text' name='search' />");
+        out.println("<input type='submit' value='Search' />");
+        out.println("</form>");
         out.println("<table border='1'>");
         out.println("<tr><th>ID</th><th>title</th><th>author</th><th>price</th> <th>action</th></tr>");
-
         try {
             dbManager.openConnection(); // open a connection to the database
             Connection conn = dbManager.getConnection();
 
+            String search = request.getParameter("search");
             String sql = "SELECT id, title, author, price FROM Books";
+            if (search != null && !search.isEmpty()) {
+                sql += " WHERE title LIKE '%" + search + "%'";
+            }
             Statement stmt = conn.createStatement();
             ResultSet rs = stmt.executeQuery(sql);
 
             while (rs.next()) {
-
-                /*
-                 * String title = request.getParameter("title");
-                 * String author = request.getParameter("author");
-                 * String priceStr = request.getParameter("price");
-                 */
                 int id = rs.getInt("id");
                 String title = rs.getString("title");
                 String author = rs.getString("author");
@@ -80,7 +91,7 @@ public class DisplayBooksServlet extends HttpServlet {
             stmt.close();
 
             out.println("</table>");
-            out.println("<p><a href=\"index.html\">Go Back</a></p>");
+            out.println("<p><a href=\"index.html\"> <= To Home</a></p>");
             out.println("</body></html>");
 
         } catch (SQLException e) {
