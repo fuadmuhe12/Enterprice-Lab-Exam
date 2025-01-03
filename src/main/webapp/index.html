@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Book Store</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            text-align: center;
+        }
+
+        h1 {
+            color: #333;
+            margin-top: 50px;
+        }
+
+        form {
+            margin-top: 50px;
+        }
+
+        input[type="text"] {
+            padding: 5px;
+        }
+
+        input[type="submit"] {
+            padding: 5px;
+            background-color: #333;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #444;
+        }
+
+        a {
+            text-decoration: none;
+            color: #333;
+            padding: 5px;
+            border: 1px solid #333;
+        }
+
+        a:hover {
+            background-color: #333;
+            color: #fff;
+        }
+
+    </style>
+</head>
+
+<body>
+   <h1>Welcome to book store</h1>
+
+    <!-- 
+    public class book {
+    private int id;
+    private String title;
+    private String author;
+    private double price;
+}
+ -->
+    <form method="POST" action="createBook">
+
+        <label for="title">title:</label>
+        <input type="text" name="title" id="title" required /><br><br>
+
+        <label for="author">author:</label>
+        <input type="text" name="author" id="author" required /><br><br>
+
+        <label for="price">price:</label>
+        <input type="number" name="price" id="price" required /><br><br>
+
+        <input type="submit" value="Create a Book" />
+    </form>
+
+    <br /><br />
+
+    <h3>View Books</h3>
+    <a href="viewBooks">View All Books</a>
+</body>
+
+</html>
