@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Standalone Group Chat</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f8f9fa;
+            margin: 1rem;
+        }
+
+        #chatBox {
+            width: 100%;
+            height: 400px;
+            background: #ffffff;
+            border: 1px solid #ccc;
+            overflow-y: auto;
+            padding: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .message-entry {
+            margin-bottom: 0.5rem;
+            line-height: 1.2;
+        }
+
+        .message-username {
+            font-weight: bold;
+        }
+
+        .message-timestamp {
+            font-size: 0.8rem;
+            color: #777;
+            margin-left: 5px;
+        }
+
+        .inputs {
+            margin-bottom: 1rem;
+        }
+
+        .inputs input {
+            padding: 0.5rem;
+            width: 200px;
+            margin-right: 5px;
+        }
+
+        button {
+            padding: 0.5rem 1rem;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Standalone Group Chat</h1>
+
+    <div id="chatBox"></div>
+
+    <div class="inputs">
+        <input type="text" id="username" placeholder="Username" />
+        <input type="text" id="message" placeholder="Your message..." />
+        <button onclick="sendMessage()">Send</button>
+    </div>
+
+    <!-- SockJS + STOMP libraries -->
+    <script src="https://cdn.jsdelivr.net/npm/sockjs-client/dist/sockjs.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/stompjs/lib/stomp.min.js"></script>
+
+    <script>
+        // Adjust this to point to your actual backend:
+        // e.g., "http://localhost:8080" or "https://mydomain.com"
+        const BASE_URL = 'http://localhost:7233';
+
+        let stompClient = null;
+
+        // 1. Load the existing messages from the REST endpoint.
+        async function loadChatHistory() {
+            const chatBox = document.getElementById('chatBox');
+            try {
+                const response = await fetch(`${BASE_URL}/api/chat/messages`);
+                if (!response.ok) {
+                    console.error('Failed to fetch chat history:', response.status);
+                    return;
+                }
+                const messages = await response.json();
+                // Clear existing
+                chatBox.innerHTML = '';
+                // Append fetched messages
+                messages.forEach(msg => {
+                    addMessageToUI(msg.username, msg.content, msg.timestamp);
+                });
+            } catch (error) {
+                console.error('Error fetching chat history:', error);
+            }
+        }
+
+        // 2. Connect to WebSocket using SockJS + STOMP
+        function connectWebSocket() {
+            // Point SockJS to your backend's STOMP endpoint
+            const socket = new SockJS(`${BASE_URL}/ws`);
+            stompClient = Stomp.over(socket);
+
+            // If you want less debug logs, uncomment:
+            // stompClient.debug = null;
+
+            stompClient.connect({}, function (frame) {
+                console.log('Connected:', frame);
+                // Subscribe to topic
+                stompClient.subscribe('/topic/group', function (messageOutput) {
+                    const msgBody = JSON.parse(messageOutput.body);
+                    // The broadcast from the server might or might not have a timestamp.
+                    // If not, pass null or generate a new timestamp on client side.
+                    addMessageToUI(msgBody.username, msgBody.content, null);
+                });
+            }, function (error) {
+                console.error('STOMP error:', error);
+            });
+        }
+
+        // 3. Send a new message
+        function sendMessage() {
+            const username = document.getElementById('username').value.trim();
+            const content = document.getElementById('message').value.trim();
+
+            if (!username || !content) {
+                alert('Please enter username and message.');
+                return;
+            }
+
+            // Send to /app/sendMessage on the backend
+            stompClient.send('/app/sendMessage', {}, JSON.stringify({
+                username: username,
+                content: content
+            }));
+
+            // Clear the message input
+            document.getElementById('message').value = '';
+        }
+
+        // 4. Add message to UI
+        function addMessageToUI(username, content, timestamp) {
+            const chatBox = document.getElementById('chatBox');
+            const messageDiv = document.createElement('div');
+            messageDiv.classList.add('message-entry');
+
+            let timeString = '';
+            if (timestamp) {
+                try {
+                    let parsed = new Date(timestamp);
+                    timeString = parsed.toLocaleString();
+                } catch (e) {
+                    console.warn('Could not parse timestamp:', timestamp);
+                }
+            }
+
+            messageDiv.innerHTML = `
+        <span class="message-username">${username}</span>
+        ${timeString ? `<span class="message-timestamp">(${timeString})</span>` : ''}
+        <div>${content}</div>
+      `;
+            chatBox.appendChild(messageDiv);
+            // Auto-scroll
+            chatBox.scrollTop = chatBox.scrollHeight;
+        }
+
+        // On page load
+        window.addEventListener('load', () => {
+            loadChatHistory();
+            connectWebSocket();
+        });
+    </script>
+</body>
+
+</html>
