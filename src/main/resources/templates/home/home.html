@@ -7,20 +7,7 @@
 </head>
 
 <body>
-    <nav class="navbar">
-        <div class="container">
-            <a href="/home" class="logo">Your App</a>
-            <div class="nav-items">
-                <span sec:authentication="name" class="username"></span>
-                <form th:action="@{/auth/logout}" method="post" class="logout-form">
-                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
-                    <button type="submit" class="logout-btn">Logout</button>
-                </form>
-
-                <a href="/home/discussion"><button type="submit" class="logout-btn">discussion</button></a>
-            </div>
-        </div>
-    </nav>
+    <nav th:replace="~{fragments/navbar :: navbar}"></nav>
 
     <div class="container main-content">
         <h1>Welcome to Your Home Page</h1>

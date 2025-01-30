@@ -1,6 +1,5 @@
 package com.kortex.aau_social_media.model;
 
-import java.util.List;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -21,8 +20,8 @@ public class UserEntity {
 
     private String profilePic = "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png";
 
-    @ElementCollection(fetch = FetchType.EAGER)
-    private List<String> roles;
+    @Column(name = "role", nullable = false, columnDefinition = "varchar(255) default 'USER'")
+    private String role;
 
     private String universityId;
     private String universityPassword;

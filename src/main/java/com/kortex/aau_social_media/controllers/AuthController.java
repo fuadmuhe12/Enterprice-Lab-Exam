@@ -7,6 +7,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import jakarta.validation.Valid;
+import org.springframework.validation.BindingResult;
 
 @Controller
 @RequestMapping("/auth")
@@ -30,7 +32,11 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public String registerUser(UserRegistrationDTO registrationDTO, Model model) {
+    public String registerUser(@Valid UserRegistrationDTO registrationDTO, BindingResult bindingResult, Model model) {
+        if (bindingResult.hasErrors()) {
+            return "auth/register";
+        }
+
         String error = userService.registerUser(registrationDTO);
 
         if (error != null) {

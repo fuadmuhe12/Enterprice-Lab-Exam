@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head>
+    <title>Announcements</title>
+    <style>
+        /* Announcements Page Styles */
+        .announcement-form {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+        }
+    
+        .form-group {
+            margin-bottom: 15px;
+        }
+    
+        .form-control {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+    
+        .btn-primary {
+            background-color: #007bff;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+    
+        .announcement-card {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+    
+        .meta {
+            color: #6c757d;
+            font-size: 0.9em;
+            margin-bottom: 10px;
+        }
+    
+        .interaction-buttons {
+            margin: 15px 0;
+        }
+    
+        .like-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 1.2em;
+            padding: 5px 10px;
+        }
+    
+        .comments-section {
+            margin-top: 15px;
+            border-top: 1px solid #eee;
+            padding-top: 15px;
+        }
+    
+        .comment {
+            background: #f8f9fa;
+            padding: 10px;
+            border-radius: 4px;
+            margin-bottom: 10px;
+        }
+    
+        .comment-form {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+    
+        .comment-input {
+            flex-grow: 1;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+    
+        .comment-btn {
+            background-color: #28a745;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+    
+        .error {
+            color: #dc3545;
+            font-size: 0.9em;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+
+<body>
+    <nav th:replace="~{fragments/navbar :: navbar}"></nav>
+
+    <div class="container">
+        <h1>Announcements</h1>
+
+        <!-- Announcement Creation Form -->
+        <div sec:authorize="hasAuthority('ADMIN')" class="announcement-form">
+            <form th:action="@{/announcements}" method="post" th:object="${announcementDTO}">
+                <div class="form-group">
+                    <input type="text" th:field="*{title}" placeholder="Announcement title" class="form-control">
+                    <p th:if="${#fields.hasErrors('title')}" th:errors="*{title}" class="error"></p>
+                </div>
+
+                <div class="form-group">
+                    <textarea th:field="*{content}" placeholder="Announcement content" class="form-control"
+                        rows="4"></textarea>
+                    <p th:if="${#fields.hasErrors('content')}" th:errors="*{content}" class="error"></p>
+                </div>
+
+                <button type="submit" class="btn-primary">Post Announcement</button>
+            </form>
+        </div>
+
+
+
+        <!-- Announcements List -->
+        <div class="announcements-list">
+            <div th:each="announcement : ${announcements}" class="announcement-card">
+                <h3 th:text="${announcement.title}"></h3>
+                <p class="meta">
+                    Posted by <span th:text="${announcement.createdBy}"></span>
+                    at <span th:text="${#temporals.format(announcement.createdAt, 'dd MMM yyyy HH:mm')}"></span>
+                </p>
+                <p th:text="${announcement.content}"></p>
+
+                <!-- Like Button -->
+                <div class="interaction-buttons">
+                    <form th:action="@{/announcements/{id}/like(id=${announcement.id})}" method="post">
+                        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+                        <button type="submit" class="like-btn">
+
+                            <span th:text="${#authentication?.principal?.username != null 
+                                          && #sets.contains(announcement.likedBy, #authentication.principal.username) 
+                                          ? '❤️' : '🤍'}"></span>
+                            <span th:text="${#sets.size(announcement.likedBy)}"></span>
+                        </button>
+                    </form>
+                </div>
+
+                <!-- Comments Section -->
+                <div class="comments-section">
+                    <div th:each="comment : ${announcement.comments}" class="comment" th:if="${announcement.comments} != null">
+                        <strong th:text="${comment.username}"></strong>:
+                        <span th:text="${comment.text}"></span>
+                        <small th:text="${#temporals.format(comment.createdAt, 'dd MMM HH:mm')}"></small>
+                    </div>
+
+                    <!-- Add Comment Form -->
+                    <!-- Change the comment form -->
+                    <form th:action="@{/announcements/{id}/comments(id=${announcement.id})}" method="post" class="comment-form"
+                        th:object="${commentDTO}">
+                        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+                        <input type="text" name="text" placeholder="Write a comment..." class="comment-input" th:field="*{text}">
+                        <p th:if="${#fields.hasErrors('text')}" th:errors="*{text}" class="error"></p>
+                        <button type="submit" class="comment-btn">Post</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

@@ -1,6 +1,7 @@
 package com.kortex.aau_social_media.security;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.stream.Collectors;
 
 import org.springframework.security.core.GrantedAuthority;
@@ -24,12 +25,14 @@ public class CustomUserDetailService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        UserEntity user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
 
-        UserEntity user = userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException("User not found"));
-
-        UserDetails userDetails = new User(user.getUsername(), user.getPassword(),mapRolesToAuthorities(user.getRoles()));
-        return userDetails;
-
+        return User.builder()
+                .username(user.getUsername()) // Ensure username is properly set
+                .password(user.getPassword())
+                .authorities(Collections.singletonList(new SimpleGrantedAuthority(user.getRole()))) // Fixed here
+                .build();
     }
 
     private Collection<GrantedAuthority> mapRolesToAuthorities(Collection<String> roles) {

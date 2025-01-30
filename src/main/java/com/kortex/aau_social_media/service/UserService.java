@@ -28,8 +28,13 @@ public class UserService {
             return "Username already used";
         }
 
+        if (userRepository.existsByUniversityId(registrationDTO.getUniversityId())) {
+            return "University ID already used";
+        }
+
         UserEntity user = UserMapper.toEntity(registrationDTO);
         user.setPassword(passwordEncoder.encode(registrationDTO.getPassword()));
+        user.setRole("USER");
         userRepository.save(user);
 
         return null; // No error

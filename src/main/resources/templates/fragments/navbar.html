@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head>
+    <meta charset="UTF-8">
+</head>
+
+<body>
+    <!-- Navbar Fragment -->
+    <nav th:fragment="navbar"  class="navbar">
+        <div class="container">
+            <a href="/home" class="logo">Your App</a>
+            <div class="nav-items">
+                <span sec:authentication="name" class="username"></span>
+                <form th:action="@{/auth/logout}" method="post" class="logout-form">
+                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+                    <button type="submit" class="logout-btn">Logout</button>
+                </form>
+    
+                <a href="/home/discussion"><button type="submit" class="logout-btn">discussion</button></a>
+                <a href="/announcements"><button type="submit" class="logout-btn">Announcement</button></a>
+            </div>
+        </div>
+    </nav>
+</body>
+
+</html>
