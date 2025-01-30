@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
 <head>
     <meta charset="UTF-8" />
@@ -60,7 +60,7 @@
     <div id="chatBox"></div>
 
     <div class="inputs">
-        <input type="text" id="username" placeholder="Username" />
+<input type="text" hidden id="username" th:value="${#authentication.principal.username}" placeholder="Username" />
         <input type="text" id="message" placeholder="Your message..." />
         <button onclick="sendMessage()">Send</button>
     </div>

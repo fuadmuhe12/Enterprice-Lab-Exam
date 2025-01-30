@@ -9,7 +9,9 @@ import com.kortex.aau_social_media.repository.CommentRepository;
 
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -19,11 +21,13 @@ public class AnnouncementService {
 
     private final AnnouncementRepository announcementRepository;
     private final CommentRepository commentRepository;
+    private final FileUpload fileUpload;
 
     public AnnouncementService(AnnouncementRepository announcementRepository, 
-                              CommentRepository commentRepository) {
+                              CommentRepository commentRepository, FileUpload fileUpload) {
         this.announcementRepository = announcementRepository;
         this.commentRepository = commentRepository;
+        this.fileUpload = fileUpload;
         
 
     }
@@ -38,6 +42,7 @@ public class AnnouncementService {
                         announcement.getCreatedBy(),
                         announcement.getCreatedAt(),
                         announcement.getLikedBy(),
+                        announcement.getImageUrl(),
                         getCommentsForAnnouncement(announcement.getId())
                 ))
                 .collect(Collectors.toList());
@@ -55,14 +60,29 @@ public class AnnouncementService {
 
     
 
-    public Announcement createAnnouncement(AnnouncementDTO announcementDTO) {
+     public Announcement createAnnouncement(AnnouncementDTO announcementDTO) {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
 
+        // Create new Announcement from DTO
         Announcement announcement = new Announcement();
         announcement.setTitle(announcementDTO.getTitle());
         announcement.setContent(announcementDTO.getContent());
         announcement.setCreatedBy(username);
 
+        // Check if an image was provided
+        MultipartFile imageFile = announcementDTO.getImageFile();
+        if (imageFile != null && !imageFile.isEmpty()) {
+            try {
+                // Upload file to Cloudinary and get the URL
+                String imageUrl = fileUpload.uploadFile(imageFile);
+                announcement.setImageUrl(imageUrl);
+            } catch (IOException e) {
+                // handle error accordingly, e.g. log it or rethrow
+                e.printStackTrace();
+            }
+        }
+
+        // Save to DB
         return announcementRepository.save(announcement);
     }
 

@@ -5,6 +5,8 @@ import com.kortex.aau_social_media.dto.AnnouncementWithCommentsDTO;
 import com.kortex.aau_social_media.dto.CommentDTO;
 import com.kortex.aau_social_media.service.AnnouncementService;
 import com.kortex.aau_social_media.service.CommentService;
+import com.kortex.aau_social_media.service.FileUpload;
+
 import jakarta.validation.Valid;
 
 import java.util.List;
@@ -23,11 +25,13 @@ public class AnnouncementController {
 
     private final AnnouncementService announcementService;
     private final CommentService commentService;
+    private final FileUpload fileUpload;
 
     public AnnouncementController(AnnouncementService announcementService,
-                                 CommentService commentService) {
+                                 CommentService commentService, FileUpload fileUpload) {
         this.announcementService = announcementService;
         this.commentService = commentService;
+        this.fileUpload = fileUpload;
     }
 
     @GetMapping
@@ -45,8 +49,10 @@ public class AnnouncementController {
     public CommentService commentService() {
         return commentService;
     }
+   
     @PostMapping
-    public String createAnnouncement(@Valid @ModelAttribute("announcementDTO") AnnouncementDTO announcementDTO,
+    public String createAnnouncement(
+            @Valid @ModelAttribute("announcementDTO") AnnouncementDTO announcementDTO,
             BindingResult result,
             Model model) {
         if (result.hasErrors()) {

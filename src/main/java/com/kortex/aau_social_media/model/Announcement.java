@@ -28,6 +28,8 @@ public class Announcement {
     // Optional: track who created the announcement
     private String createdBy;
 
+    private String imageUrl; // <-- NEW: store the URL of the uploaded image
+
     // A set of user names or IDs that liked the announcement
     @ElementCollection
     @CollectionTable(name = "announcement_likes", joinColumns = @JoinColumn(name = "announcement_id"))

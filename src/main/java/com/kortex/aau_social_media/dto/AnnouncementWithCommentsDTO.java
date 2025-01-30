@@ -18,6 +18,7 @@ public class AnnouncementWithCommentsDTO {
     private String createdBy;
     private LocalDateTime createdAt;
     private Set<String> likedBy;
+    private String imageUrl;
     private List<CommentShowDto> comments;
 }
 
