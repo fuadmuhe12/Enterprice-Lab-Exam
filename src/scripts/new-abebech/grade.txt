@@ -1,0 +1,69 @@
+Addis Ababa University (AAU) employs a detailed grading system to assess and document student performance across its various academic programs. This system is designed to provide a standardized evaluation framework, ensuring consistency and fairness in academic assessments.
+
+**Grading Scale and Grade Points**
+
+AAU utilizes a letter grading system, each corresponding to a specific grade point and descriptive classification. The general structure is as follows:
+
+| Raw Mark Interval (%) | Letter Grade | Grade Point | Description                             | Class Description                      |
+|-----------------------|--------------|-------------|-----------------------------------------|----------------------------------------|
+| 90 – 100              | A+           | 4.0         | Excellent                               | First Class with Great Distinction     |
+| 85 – 89               | A            | 4.0         | Excellent                               | First Class with Great Distinction     |
+| 80 – 84               | A-           | 3.75        | Excellent                               | First Class with Great Distinction     |
+| 75 – 79               | B+           | 3.5         | Very Good                               | First Class with Distinction           |
+| 70 – 74               | B            | 3.0         | Very Good                               | First Class with Distinction           |
+| 65 – 69               | B-           | 2.75        | Good                                    | First Class                            |
+| 60 – 64               | C+           | 2.5         | Good                                    | Second Class                           |
+| 50 – 59               | C            | 2.0         | Satisfactory                            | Second Class                           |
+| 45 – 49               | C-           | 1.75        | Unsatisfactory                          | Lower Class                            |
+| 40 – 44               | D            | 1.0         | Very Poor                               | Lower Class                            |
+| Below 40              | F            | 0.0         | Fail                                    | Lowest Class                           |
+
+*Note: To pass a course, a student must achieve a minimum of 40% in the final exam.*
+
+This grading scale is outlined in the academic policy of institutions like the Addis Ababa Science and Technology University. ([aastu.edu.et](https://www.aastu.edu.et/College-of-engineering/civil-engineering-2/?utm_source=chatgpt.com))
+
+**Grade Point Average (GPA) Calculation**
+
+The Grade Point Average (GPA) is a crucial metric that reflects a student's overall academic performance. It is calculated using the following steps:
+
+1. **Multiply** the grade point for each course by the number of credit units (CU) assigned to that course.
+2. **Sum** the results from step 1 to obtain the total grade points earned.
+3. **Divide** the total grade points by the total number of credit units for which a grade was received.
+
+**Example Calculation:**
+
+Assume a student has completed the following courses in a semester:
+
+| Course             | Letter Grade | Grade Point | Credit Units (CU) | Grade Points Earned |
+|--------------------|--------------|-------------|-------------------|---------------------|
+| Molecular Genetics | B            | 3.0         | 4                 | 12                  |
+| Basic Ecology      | C+           | 2.5         | 3                 | 7.5                 |
+| Bioinformatics     | A            | 4.0         | 3                 | 12                  |
+| Enzymology         | B            | 3.0         | 3                 | 9                   |
+| Tissue Culture     | B            | 3.0         | 2                 | 6                   |
+
+**Total Credit Units:** 15
+
+**Total Grade Points Earned:** 46.5
+
+**GPA:** 46.5 ÷ 15 = 3.1
+
+This method ensures a comprehensive assessment of a student's performance across different courses. ([ugfacts.net](https://ugfacts.net/et/addis-ababa-university-grading-scale/?utm_source=chatgpt.com))
+
+**Cumulative Grade Point Average (CGPA)**
+
+The Cumulative Grade Point Average (CGPA) provides an overall view of a student's academic performance throughout their entire program. It is calculated by:
+
+1. **Multiplying** the grade point obtained in each course by the credit units assigned to that course to arrive at the weighted score for the course.
+2. **Adding** together the weighted scores for all the courses taken up to that time.
+3. **Dividing** the total weighted score by the total number of credit units taken up to that time.
+
+A minimum CGPA of 2.0 is typically required for graduation from undergraduate programs, while master's programs often require a minimum CGPA of 3.0. ([ewkete.com](https://ewkete.com/2019/05/29/ethiopian-higher-education-credit-system/?utm_source=chatgpt.com))
+
+**Additional Considerations**
+
+- **Passing Criteria:** To pass a course, students must achieve at least 40% in the final examination.
+- **Academic Standing:** Students are expected to maintain a minimum CGPA as specified by their respective programs to remain in good academic standing.
+- **Probation and Dismissal:** Failing to meet the minimum CGPA requirements may result in academic probation or dismissal, depending on the university's regulations.
+
+It's important to note that while this grading system is widely adopted, specific faculties or programs may have variations or additional requirements. Students are advised to consult their department's academic guidelines for detailed information. 

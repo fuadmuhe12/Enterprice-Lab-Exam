@@ -1,0 +1,132 @@
+Schools and departemtn in Addis ababa institue of tech
+
+1. School of Chemical and Bio Engineering (SCBE)
+What is Chemical Engineering?
+Chemical engineering involves designing and operating chemical plants, refining raw materials, and manufacturing useful products while minimizing waste and energy consumption.
+Specializations:
+Process Engineering
+Food Process Engineering
+Environmental Engineering
+Material Engineering
+Biochemical and Biomedical Engineering
+Sustainable Energy Engineering
+Pharmaceutical and Petroleum Engineering
+Mineral Process Engineering
+Industries & Applications:
+Cement, paper, plastics, pharmaceuticals, petroleum, and energy industries.
+Laboratories Available:
+Chemical reaction engineering, environmental engineering, food engineering, biochemical labs.
+International Partners:
+Universities in Germany, USA, Canada, South Africa, Turkey, China, and France.
+2. School of Civil and Environmental Engineering (SCEE)
+What do Civil Engineers do?
+They design, build, and manage infrastructure projects like roads, bridges, buildings, and water systems.
+Major Specializations:
+Structural Engineering: Designs buildings, bridges, skyscrapers.
+Irrigation Engineering: Manages water supply for agriculture.
+Environmental Engineering: Works on pollution control and sustainable development.
+Geotechnical Engineering: Focuses on soil mechanics and foundation design.
+Hydraulics & Hydrology Engineering: Designs dams and hydropower systems.
+Road & Transport Engineering: Develops road and transport systems.
+Emerging Technologies:
+3D concrete printing, structural health monitoring, earthquake-resistant structures.
+3. School of Electrical and Computer Engineering (SECE)
+What is Electrical and Computer Engineering?
+Electrical engineering focuses on electricity, electronics, power, and telecommunications, while computer engineering combines software and hardware design.
+Specializations:
+Power and Energy Engineering
+Communication Engineering
+Computer Engineering
+Industrial Control Engineering
+Electronics Engineering
+Industry Applications:
+Telecommunications (Ethio Telecom, Huawei, ZTE), power generation, transportation, manufacturing, and software development.
+4. School of Mechanical and Industrial Engineering (SMIE)
+What is Mechanical Engineering?
+This broad field involves designing and manufacturing machines, power systems, and industrial processes.
+Specializations:
+Mechanical Design
+Energy Conversion (Thermal Engineering)
+Robotics and Mechatronics
+Manufacturing Engineering
+Industrial Engineering
+Railway Engineering
+Career Opportunities:
+Aerospace, automotive, energy, biomedical devices, HVAC, and automation industries.
+Laboratory Facilities:
+Computational labs, thermal and fluid mechanics labs, mechatronics, motor vehicle labs.
+5. Pre-Engineering and Common Courses (PECC)
+What is PECC?
+This department manages the placement of first-year students into engineering disciplines based on their academic performance and preferences.
+Placement Criteria:
+90% based on CGPA
+10% based on student preference
+Affirmative action considerations for female students, disabled students, and students from less developed regions.
+Available Programs for Selection:
+Biomedical Engineering (CBME)
+Chemical and Bio Engineering (SCBE)
+Civil and Environmental Engineering (SCEE)
+Electrical and Computer Engineering (SECE)
+Software Engineering and Computing (SiTE)
+Mechanical and Industrial Engineering (SMIE)
+6. School of Biomedical Engineering (CBME)
+What is Biomedical Engineering?
+It applies engineering principles to solve medical and biological problems.
+Program Structure:
+3.5-year program covering biomedical science, electrical engineering, and mechanical engineering.
+Focus Areas:
+Bio-instrumentation (Medical devices)
+Medical Imaging (X-ray, MRI)
+Biomechanics (Prosthetics, rehabilitation)
+Biomedical Computing (Medical software, AI in healthcare)
+Job Opportunities:
+Clinical Engineering in hospitals
+Medical device design (Pacemakers, prosthetics)
+Biomedical research
+Local manufacturing and healthcare startups
+
+
+
+### **7. School of Information Technology and Engineering (SiTE)**
+- **What is SiTE?**  
+  It prepares students for careers in **computing, artificial intelligence, cybersecurity, software engineering, and IT**.
+- **Major Disciplines:**
+  - **Computer Engineering (CE)**
+  - **Cybersecurity (CSEC)**
+  - **Information Systems (IS)**
+  - **Information Technology (IT)**
+  - **Software Engineering (SE)**
+  - **Information Science (IS)**
+  - **Artificial Intelligence (AI)**
+  - **Computer Science (CS)**
+- **Key Skills Required:**
+  - Problem-solving and critical thinking
+  - Software development and IT systems management
+  - Cybersecurity and digital forensics
+  - Machine learning and AI application
+- **Programming Languages Used:**
+  - Python, Java, C++, JavaScript, Swift, R, SQL, PHP, Ruby
+  - Cybersecurity tools: Kali Linux, nmap, metasploit, etc.
+- **Career Opportunities:**
+  - **International:** Google, Microsoft, Amazon, AI research labs, government security agencies.
+  - **Ethiopian Context:** Growing IT hubs like **Ethio ICT Park**, high demand for **software development, AI, and cybersecurity experts**.
+- **Potential Career Paths:**
+  - Software Engineering (Web, Mobile, Game Development)
+  - AI (Machine Learning, Data Science, Robotics)
+  - Cybersecurity (Threat Analysis, Digital Forensics)
+  - IT (Cloud Computing, E-Commerce Solutions)
+- **Global Challenges:**
+  - Rapid technological changes
+  - High competition
+  - Ethical concerns in AI and data privacy
+- **Local Challenges:**
+  - Limited infrastructure
+  - Brain drain and funding issues
+  - Regulatory challenges in IT security
+- **Why Join?**
+  - High demand and competitive salaries
+  - Creative and innovative work environment
+  - Global impact and meaningful career paths
+  - Constant learning opportunities
+- **Top International Study Destinations:**
+  - USA, UK, Canada, Australia, Singapore, Germany, and AAU itself.
