@@ -16,5 +16,15 @@ public class HomeController {
         return "home/discussion";
     }
 
+    @GetMapping("/terms")
+    public String terms() {
+        return "terms";
+    }
+
+    @GetMapping("/privacy")
+    public String privacy() {
+        return "privacy";
+    }
+
 
 }
