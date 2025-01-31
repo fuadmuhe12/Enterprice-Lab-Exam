@@ -9,28 +9,40 @@
 <body>
     <div class="container">
         <h2>Register</h2>
+        <!-- Global error from service -->
         <div th:if="${error}" class="error" th:text="${error}"></div>
 
-        <form th:action="@{/auth/register}" method="post">
+        <form th:action="@{/auth/register}" method="post" th:object="${user}">
+            <!-- Name Field -->
             <div>
                 <label>Full Name:</label>
-                <input type="text" name="name" required>
+                <input type="text" th:field="*{name}" required>
+                <div th:if="${#fields.hasErrors('name')}" class="error" th:errors="*{name}"></div>
             </div>
+            <!-- Username Field -->
             <div>
                 <label>Username:</label>
-                <input type="text" name="username" required>
+                <input type="text" th:field="*{username}" required>
+                <div th:if="${#fields.hasErrors('username')}" class="error" th:errors="*{username}"></div>
             </div>
+            <!-- Password Field -->
             <div>
                 <label>Password:</label>
-                <input type="password" name="password" required>
+                <input type="password" th:field="*{password}" required>
+                <div th:if="${#fields.hasErrors('password')}" class="error" th:errors="*{password}"></div>
             </div>
+            <!-- University ID Field -->
             <div>
                 <label>University ID:</label>
-                <input type="text" name="universityId" required>
+                <input type="text" th:field="*{universityId}" required>
+                <div th:if="${#fields.hasErrors('universityId')}" class="error" th:errors="*{universityId}"></div>
             </div>
+            <!-- University Password Field -->
             <div>
                 <label>University Password:</label>
-                <input type="password" name="universityPassword" required>
+                <input type="password" th:field="*{universityPassword}" required>
+                <div th:if="${#fields.hasErrors('universityPassword')}" class="error" th:errors="*{universityPassword}">
+                </div>
             </div>
             <button type="submit">Register</button>
         </form>

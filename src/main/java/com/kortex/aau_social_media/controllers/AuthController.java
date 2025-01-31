@@ -5,6 +5,7 @@ import com.kortex.aau_social_media.service.UserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import jakarta.validation.Valid;
@@ -32,13 +33,15 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public String registerUser(@Valid UserRegistrationDTO registrationDTO, BindingResult bindingResult, Model model) {
+    public String registerUser(
+            @Valid @ModelAttribute("user") UserRegistrationDTO registrationDTO,
+            BindingResult bindingResult,
+            Model model) {
         if (bindingResult.hasErrors()) {
             return "auth/register";
         }
 
         String error = userService.registerUser(registrationDTO);
-
         if (error != null) {
             model.addAttribute("error", error);
             return "auth/register";

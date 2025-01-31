@@ -50,6 +50,37 @@
             padding: 0.5rem 1rem;
             cursor: pointer;
         }
+          #chatBox {
+        display: flex;
+        flex-direction: column;
+        gap: 0.8rem;
+    }
+
+    .message-entry {
+        max-width: 70%;
+        padding: 10px;
+        border-radius: 15px;
+        position: relative;
+    }
+
+    .my-message {
+        background: #DCF8C6;
+        align-self: flex-end;
+        margin-left: 30%;
+    }
+
+    .other-message {
+        background: #EAEAEA;
+        align-self: flex-start;
+        margin-right: 30%;
+    }
+
+    .message-timestamp {
+        display: block;
+        font-size: 0.75rem;
+        color: #666;
+        margin-top: 4px;
+    }
     </style>
 </head>
 
@@ -90,7 +121,7 @@
                 chatBox.innerHTML = '';
                 // Append fetched messages
                 messages.forEach(msg => {
-                    addMessageToUI(msg.username, msg.content, msg.timestamp);
+                    addMessageToUI(msg.username, msg.content, msg.timestamp.toEpochMilli());
                 });
             } catch (error) {
                 console.error('Error fetching chat history:', error);
@@ -111,9 +142,7 @@
                 // Subscribe to topic
                 stompClient.subscribe('/topic/group', function (messageOutput) {
                     const msgBody = JSON.parse(messageOutput.body);
-                    // The broadcast from the server might or might not have a timestamp.
-                    // If not, pass null or generate a new timestamp on client side.
-                    addMessageToUI(msgBody.username, msgBody.content, null);
+                    addMessageToUI(msgBody.username, msgBody.content, msgBody.timestamp);
                 });
             }, function (error) {
                 console.error('STOMP error:', error);
@@ -142,30 +171,38 @@
 
         // 4. Add message to UI
         function addMessageToUI(username, content, timestamp) {
-            const chatBox = document.getElementById('chatBox');
-            const messageDiv = document.createElement('div');
-            messageDiv.classList.add('message-entry');
+                const chatBox = document.getElementById('chatBox');
+                const messageDiv = document.createElement('div');
+                const currentUser = document.getElementById('username').value.trim();
 
-            let timeString = '';
-            if (timestamp) {
-                try {
-                    let parsed = new Date(timestamp);
-                    timeString = parsed.toLocaleString();
-                } catch (e) {
-                    console.warn('Could not parse timestamp:', timestamp);
+                // Alignment classes
+                messageDiv.classList.add('message-entry',
+                    username === currentUser ? 'my-message' : 'other-message');
+
+                // Date formatting
+                let timeString = 'Now';
+                if (timestamp) {
+                    try {
+                        const date = new Date(timestamp);
+                        timeString = date.toLocaleTimeString([], {
+                            hour: '2-digit',
+                            minute: '2-digit',
+                            hour12: true
+                        });
+                    } catch (e) {
+                        console.warn('Using fallback timestamp');
+                    }
                 }
-            }
 
-            messageDiv.innerHTML = `
+                messageDiv.innerHTML = `
         <span class="message-username">${username}</span>
-        ${timeString ? `<span class="message-timestamp">(${timeString})</span>` : ''}
-        <div>${content}</div>
-      `;
-            chatBox.appendChild(messageDiv);
-            // Auto-scroll
-            chatBox.scrollTop = chatBox.scrollHeight;
-        }
+        <div class="message-content">${content}</div>
+        <span class="message-timestamp">${timeString}</span>
+    `;
 
+                chatBox.appendChild(messageDiv);
+                chatBox.scrollTop = chatBox.scrollHeight;
+            }
         // On page load
         window.addEventListener('load', () => {
             loadChatHistory();

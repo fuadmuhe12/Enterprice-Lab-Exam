@@ -19,8 +19,6 @@ public class SecurityConfig {
     public SecurityConfig(CustomUserDetailService customUserDetailService) {
         this.customUserDetailService = customUserDetailService;
     }
-    
- 
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -39,14 +37,14 @@ public class SecurityConfig {
                         .logoutUrl("/auth/logout")
                         .logoutSuccessUrl("/auth/login?logout=true")
                         .permitAll())
-                .userDetailsService(customUserDetailService);
+                .userDetailsService(customUserDetailService); 
 
         return http.build();
     }
 
     @Bean
     public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
+        return new BCryptPasswordEncoder(); // BCrypt encoder
     }
 
     @Bean
