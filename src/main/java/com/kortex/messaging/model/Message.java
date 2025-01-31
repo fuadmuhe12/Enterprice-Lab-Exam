@@ -1,31 +1,26 @@
 package com.kortex.messaging.model;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "messages")
-public class Message {
 
+public class Message {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String username;
     private String content;
-    private LocalDateTime timestamp;
+    private Instant timestamp; // Changed to Instant
 
-    public Message() {
-    }
-
-    public Message(String username, String content, LocalDateTime timestamp) {
-        this.username = username;
-        this.content = content;
-        this.timestamp = timestamp;
-    }
-
-  
+    // Constructors remain the same
 }

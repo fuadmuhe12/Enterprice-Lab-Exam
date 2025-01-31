@@ -9,7 +9,7 @@ import com.kortex.messaging.dto.ChatMessageDTO;
 import com.kortex.messaging.model.Message;
 import com.kortex.messaging.repository.MessageRepository;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 
 @Controller
 public class ChatController {
@@ -21,17 +21,17 @@ public class ChatController {
     }
 
     // When client sends a message to /app/sendMessage, this method is invoked
-    @MessageMapping("/sendMessage")
-    @SendTo("/topic/group") // broadcast to all subscribers of this topic
-    public ChatMessageDTO sendMessage(ChatMessageDTO chatMessageDTO) {
-        // Save to DB
-        Message newMessage = new Message();
-        newMessage.setUsername(chatMessageDTO.getUsername());
-        newMessage.setContent(chatMessageDTO.getContent());
-        newMessage.setTimestamp(LocalDateTime.now());
-        messageRepository.save(newMessage);
+  @MessageMapping("/sendMessage")
+@SendTo("/topic/group")
+public ChatMessageDTO sendMessage(ChatMessageDTO chatMessageDTO) {
+    Message newMessage = new Message();
+    newMessage.setUsername(chatMessageDTO.getUsername());
+    newMessage.setContent(chatMessageDTO.getContent());
+    newMessage.setTimestamp(Instant.now());
+    messageRepository.save(newMessage);
 
-        // Return the DTO so it gets broadcast to /topic/group
-        return chatMessageDTO;
-    }
+    // Return DTO with epoch millis
+    chatMessageDTO.setTimestamp(newMessage.getTimestamp().toEpochMilli());
+    return chatMessageDTO;
+}
 }
