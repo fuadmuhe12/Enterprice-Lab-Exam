@@ -355,11 +355,10 @@
                     loadingState.style.display = 'none';
 
                     if (messages.length === 0) {
-                        // Show empty state briefly before welcome message
+                        // Show empty state and welcome message
                         emptyState.style.display = 'block';
                         setTimeout(() => {
                             emptyState.style.display = 'none';
-                            // Add default welcome message
                             const welcomeMessage = {
                                 role: "bot",
                                 content: "Hello! I'm Abebech. I'm here to help with anything AAU-related. Ask me your questions or explore more on our <a href=\"https://www.aau.edu.et\" target=\"_blank\">website</a>."
@@ -367,13 +366,13 @@
                             addMessageBubble(welcomeMessage.content, welcomeMessage.role, true);
                         }, 1000);
                     } else {
-                        // Add all previous messages to UI
+                        // Only add previous messages if they exist
                         messages.forEach(msg => {
                             addMessageBubble(msg.content, msg.role === "assistant" ? "bot" : "user", msg.role === "assistant");
                         });
-                        // Auto-scroll to bottom after loading messages
-                        messagesContainer.scrollTop = messagesContainer.scrollHeight;
                     }
+                    // Auto-scroll to bottom after loading messages
+                    messagesContainer.scrollTop = messagesContainer.scrollHeight;
                 } catch (err) {
                     console.error('Error loading previous messages:', err);
                     loadingState.style.display = 'none';
