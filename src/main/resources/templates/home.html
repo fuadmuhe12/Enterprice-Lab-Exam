@@ -1,26 +1,273 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
-
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Home Page</title>
+    <meta charset="UTF-8" />
+    <title>AAU Connect - Modern Landing</title>
+    <style>
+        /* =========================
+         * Global Reset & Font
+         * ========================= */
+        * {
+            margin: 0; 
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f9fafb; /* Light neutral background */
+            overflow-x: hidden; /* Hide horizontal scroll on animation shifts */
+        }
+
+        /* =========================
+         * Keyframe Animations
+         * ========================= */
+        /* Animated gradient background */
+        @keyframes gradientBackground {
+            0% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+        /* Simple fade-in + slight upward motion */
+        @keyframes fadeInUp {
+            0% {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* =========================
+         * Navbar (fragment)
+         * ========================= */
+        /* We'll assume your navbar fragment uses its own classes,
+           so we won't override it here. */
+
+        /* =========================
+         * Hero Section
+         * ========================= */
+        .landing-hero {
+            position: relative;
+            width: 100%;
+            min-height: 90vh; 
+            /* Vibrant multi-stop gradient background, animated */
+            background: linear-gradient(45deg, #6a62e4, #9064eb, #b88aea);
+            background-size: 200% 200%;
+            animation: gradientBackground 12s ease-in-out infinite;
+            color: #fff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 2rem 1rem;
+        }
+
+        .landing-hero h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            animation: fadeInUp 0.7s ease forwards;
+        }
+
+        .landing-hero p {
+            font-size: 1.1rem;
+            max-width: 650px;
+            margin: 0 auto 2rem;
+            line-height: 1.6;
+            animation: fadeInUp 0.9s ease forwards;
+            animation-delay: 0.2s;
+        }
+
+        .landing-hero .hero-btn {
+            background-color: #ffffff;
+            color: #333;
+            padding: 0.9rem 2rem;
+            font-size: 1rem;
+            border: none;
+            border-radius: 0.375rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+            transition: transform 0.3s ease, background-color 0.3s ease;
+            animation: fadeInUp 0.9s ease forwards;
+            animation-delay: 0.4s;
+        }
+
+        .landing-hero .hero-btn:hover {
+            transform: scale(1.05);
+            background-color: #f3f4f6;
+        }
+
+        /* Decorative Wave (white) to transition from hero to next section */
+        .hero-wave {
+            position: relative;
+            width: 100%;
+            height: 100px;
+            margin-top: -100px; /* pull wave up over the hero */
+            overflow: hidden;
+        }
+
+        /* =========================
+         * Features Section
+         * ========================= */
+        .features-section {
+            position: relative;
+            z-index: 1; /* so it sits above the wave */
+            background: #f9fafb;
+            max-width: 1200px;
+            margin: 3rem auto;
+            padding: 0 1rem;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+        }
+
+        .feature-card {
+            background: #ffffff;
+            border-radius: 0.5rem;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+            padding: 2rem;
+            text-align: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            opacity: 0;
+            animation: fadeInUp 0.7s ease forwards;
+        }
+        /* Stagger the cards */
+        .feature-card:nth-child(1) {
+            animation-delay: 0.2s;
+        }
+        .feature-card:nth-child(2) {
+            animation-delay: 0.4s;
+        }
+        .feature-card:nth-child(3) {
+            animation-delay: 0.6s;
+        }
+        .feature-card:nth-child(4) {
+            animation-delay: 0.8s;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px) scale(1.02);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+        }
+
+        .feature-card h3 {
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+            color: #1f2937;
+        }
+
+        .feature-card p {
+            font-size: 0.95rem;
+            line-height: 1.5;
+            color: #4b5563;
+        }
+
+        /* =========================
+         * Responsive Tweaks
+         * ========================= */
+        @media (max-width: 768px) {
+            .landing-hero h1 {
+                font-size: 2.2rem;
+            }
+            .landing-hero p {
+                font-size: 1rem;
+            }
+            .landing-hero .hero-btn {
+                padding: 0.6rem 1.2rem;
+            }
+            .hero-wave {
+                height: 60px;
+                margin-top: -60px;
+            }
+        }
+    </style>
 </head>
-
 <body>
-    <nav th:replace="~{fragments/navbar :: navbar}"></nav>
 
-    <div class="container main-content">
-        <h1>Welcome to Your Home Page</h1>
-        <p>You're successfully logged in!</p>
+    <!-- NAVBAR Fragment -->
+    <!-- Example: "fragments/navbar :: navbar" must match your actual file and fragment name -->
+    <nav th:replace="~{fragments/navbar :: navbar}"></nav>
+    
+    <!-- Hero Section -->
+    <section class="landing-hero">
+        <h1>Welcome to AAU Connect</h1>
+        <p>
+            Connect, Collaborate, and Create within the AAU community! 
+            Dive into discussions, stay informed with announcements,
+            and network like never before.
+        </p>
+        <button class="hero-btn" onclick="location.href='/home/discussion'">
+            Get Started
+        </button>
+    </section>
+    
+    <!-- Wave Divider (White) -->
+    <div class="hero-wave">
+        <!-- Simple SVG wave from top (white) -->
+        <svg viewBox="0 0 1440 320" style="display:block; width:100%; height:100%;">
+            <path fill="#ffffff" fill-opacity="1" 
+                  d="M0,224L60,234.7C120,245,240,267,360,250.7C480,235,600,181,720,176C840,171,960,213,1080,218.7C1200,224,1320,192,1380,176L1440,160L1440,320L1380,320C1320,320,1200,320,1080,320C960,320,840,320,720,320C600,320,480,320,360,320C240,320,120,320,60,320L0,320Z">
+            </path>
+        </svg>
     </div>
 
-    <footer>
-        <div class="container">
-            <p>© 2023 Your App. All rights reserved.</p>
+    <!-- Features / Highlights Section -->
+    <section class="features-section">
+        <!-- Feature 1 -->
+        <div class="feature-card">
+            <h3>Vibrant Discussions</h3>
+            <p>
+                Join interactive discussions with peers, ask questions, share knowledge, 
+                and stay at the forefront of what's happening in your AAU circles.
+            </p>
         </div>
-    </footer>
+        
+        <!-- Feature 2 -->
+        <div class="feature-card">
+            <h3>Real-Time Announcements</h3>
+            <p>
+                Never miss important updates! Get real-time announcements right here, 
+                whether from your department, your clubs, or the entire AAU network.
+            </p>
+        </div>
+        
+        <!-- Feature 3 -->
+        <div class="feature-card">
+            <h3>Networking Tools</h3>
+            <p>
+                Build professional and social connections. 
+                Discover new opportunities, mentorship programs, and more.
+            </p>
+        </div>
+        
+        <!-- Feature 4 -->
+        <div class="feature-card">
+            <h3>Secure & Private</h3>
+            <p>
+                Your conversations and data are protected with top-notch security measures. 
+                Engage worry-free in a trusted environment.
+            </p>
+        </div>
+    </section>
 
+    <!-- CHATBOT Fragment -->
+    <!-- Example: "fragments/chatbot :: chatbot" must match your actual file and fragment name -->
     <div th:replace="~{fragments/chatbot :: chatbot}"></div>
 
-</body>
+    <!-- FOOTER Fragment -->
+    <!-- Example: "fragments/footer :: footer" must match your actual file and fragment name -->
+    <footer th:replace="~{fragments/footer :: footer}"></footer>
 
+</body>
 </html>
