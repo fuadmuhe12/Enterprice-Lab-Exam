@@ -124,8 +124,13 @@
         }
 
         @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
         }
 
         /* Empty State */
@@ -192,6 +197,7 @@
             padding: 0.75rem;
             border-top: 1px solid #e5e7eb;
             max-width: 100%;
+            position: relative;
         }
 
         .chatbot-textarea {
@@ -208,7 +214,8 @@
             /* about 4 lines */
             overflow-y: hidden;
             /* hidden until needed */
-            max-width: calc(100% - 70px); /* Account for send button */
+            max-width: calc(100% - 70px);
+            /* Account for send button */
         }
 
         .chatbot-textarea:focus {
@@ -228,6 +235,11 @@
             transition: background 0.3s ease;
             flex-shrink: 0;
             width: 60px;
+            min-height: 35px;
+            position: absolute;
+            right: 15px;
+            bottom: 14px;
+            max-height: 35px;
         }
 
         .chatbot-send-btn:hover {
@@ -327,21 +339,21 @@
             async function loadPreviousMessages() {
                 const username = usernameField ? usernameField.value.trim() : "anonymous";
                 const encodedUsername = encodeURIComponent(username);
-                
+
                 // Show loading state
                 loadingState.style.display = 'flex';
                 emptyState.style.display = 'none';
-                
+
                 try {
                     const response = await fetch(`${chatEndpointBase}/${encodedUsername}`);
                     if (!response.ok) {
                         throw new Error(`HTTP error! status: ${response.status}`);
                     }
                     const messages = await response.json();
-                    
+
                     // Hide loading state
                     loadingState.style.display = 'none';
-                    
+
                     if (messages.length === 0) {
                         // Show empty state briefly before welcome message
                         emptyState.style.display = 'block';
