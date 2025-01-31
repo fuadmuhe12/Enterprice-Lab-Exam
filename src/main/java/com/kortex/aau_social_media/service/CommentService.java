@@ -6,6 +6,8 @@ import com.kortex.aau_social_media.model.Announcement;
 import com.kortex.aau_social_media.model.Comment;
 import com.kortex.aau_social_media.repository.AnnouncementRepository;
 import com.kortex.aau_social_media.repository.CommentRepository;
+import com.kortex.aau_social_media.repository.UserRepository;
+
 import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -15,11 +17,13 @@ public class CommentService {
 
     private final CommentRepository commentRepository;
     private final AnnouncementRepository announcementRepository;
+    private final UserRepository userRepository;
 
     public CommentService(CommentRepository commentRepository,
-            AnnouncementRepository announcementRepository) {
+            AnnouncementRepository announcementRepository, UserRepository userRepository) {
         this.commentRepository = commentRepository;
         this.announcementRepository = announcementRepository;
+        this.userRepository = userRepository;
     }
 
     public Comment saveComment(Comment comment) {
@@ -29,10 +33,29 @@ public class CommentService {
     public List<CommentShowDto> getCommentsForAnnouncement(Long announcementId) {
         return commentRepository.findByAnnouncementIdOrderByCreatedAtDesc(announcementId)
                 .stream()
-                .map(comment -> new CommentShowDto(
-                        comment.getText(),
-                        comment.getUsername(),
-                        comment.getCreatedAt()))
+                .map(comment -> {
+                    // Create base DTO
+                    CommentShowDto dto = new CommentShowDto();
+                    dto.setUsername(comment.getUsername());
+                    dto.setText(comment.getText());
+                    dto.setCreatedAt(comment.getCreatedAt());
+
+                    // Lookup the user from userRepository
+                    userRepository.findByUsername(comment.getUsername())
+                            .ifPresentOrElse(user -> {
+                                // Populate fields from UserEntity
+                                dto.setDisplayName(user.getName());
+                                dto.setProfilePic(user.getProfilePic());
+                                dto.setRole(user.getRole());
+                            }, () -> {
+                                // If user not found, you can set some defaults if you want
+                                dto.setDisplayName("Unknown User");
+                                dto.setProfilePic("https://example.com/default-profile.png");
+                                dto.setRole("N/A");
+                            });
+
+                    return dto;
+                })
                 .collect(Collectors.toList());
     }
 

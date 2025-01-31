@@ -1,0 +1,391 @@
+<div th:fragment="chatbot">
+
+    <!-- ====================== Embedded CSS ======================= -->
+    <style>
+        /* Resets & Fonts */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+        }
+
+        /* Floating Icon */
+        .chatbot-float-icon {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 55px;
+            height: 55px;
+            background-color: #2563eb;
+            color: #ffffff;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            z-index: 9999;
+            /* ensure it stays on top */
+            transition: transform 0.3s ease;
+        }
+
+        .chatbot-float-icon:hover {
+            transform: scale(1.05);
+        }
+
+        /* Chatbot Window */
+        .chatbot-window {
+            position: fixed;
+            bottom: 80px;
+            /* slightly above the float icon */
+            right: 20px;
+            width: 350px;
+            max-height: 80vh;
+            min-height: 300px;
+            background-color: #ffffff;
+            border-radius: 0.5rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            z-index: 9999;
+            /* keep above other elements */
+        }
+
+        /* Header */
+        .chatbot-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: #2563eb;
+            color: #ffffff;
+            padding: 0.75rem 1rem;
+        }
+
+        .chatbot-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        .chatbot-close-btn {
+            background: transparent;
+            border: none;
+            color: #ffffff;
+            font-size: 1.2rem;
+            cursor: pointer;
+        }
+
+        /* Messages Container */
+        .chatbot-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 1rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        /* Single Message Bubble */
+        .chatbot-message {
+            display: inline-block;
+            padding: 0.6rem 0.9rem;
+            border-radius: 0.5rem;
+            max-width: 80%;
+            position: relative;
+            animation: fadeInUp 0.3s ease forwards;
+        }
+
+        .user-msg {
+            align-self: flex-end;
+            background-color: #dbeafe;
+            /* user = light-blue */
+        }
+
+        .bot-msg {
+            align-self: flex-start;
+            background-color: #f3f4f6;
+            /* bot = off-white */
+        }
+
+        .chatbot-message-text {
+            font-size: 0.95rem;
+            line-height: 1.4;
+            white-space: pre-wrap;
+            /* preserve line breaks */
+        }
+
+        /* Typing Indicator */
+        .chatbot-typing-indicator {
+            padding: 0.5rem 1rem;
+            font-size: 0.85rem;
+            color: #6b7280;
+        }
+
+        /* Error Message */
+        .chatbot-error {
+            color: #b91c1c;
+            background: #fee2e2;
+            padding: 0.5rem 1rem;
+            font-size: 0.85rem;
+            border-radius: 0.25rem;
+            margin: 0.5rem;
+        }
+
+        /* Input Area */
+        .chatbot-input-area {
+            display: flex;
+            padding: 0.75rem;
+            border-top: 1px solid #e5e7eb;
+        }
+
+        .chatbot-textarea {
+            flex: 1;
+            border: 1px solid #e5e7eb;
+            border-radius: 0.25rem;
+            padding: 0.5rem;
+            font-size: 0.9rem;
+            outline: none;
+            resize: none;
+            /* user can’t manually drag it */
+            line-height: 1.4;
+            max-height: 6.5em;
+            /* about 4 lines */
+            overflow-y: hidden;
+            /* hidden until needed */
+        }
+
+        .chatbot-textarea:focus {
+            border-color: #2563eb;
+        }
+
+        .chatbot-send-btn {
+            border: none;
+            background: #2563eb;
+            color: #ffffff;
+            margin-left: 0.5rem;
+            padding: 0.5rem 1rem;
+            border-radius: 0.25rem;
+            cursor: pointer;
+            font-weight: 500;
+            transition: background 0.3s ease;
+        }
+
+        .chatbot-send-btn:hover {
+            background: #1d4ed8;
+        }
+
+        .chatbot-send-btn:disabled {
+            background: #93c5fd;
+            cursor: not-allowed;
+        }
+
+        /* Fade In Up Animation */
+        @keyframes fadeInUp {
+            0% {
+                opacity: 0;
+                transform: translateY(5px);
+            }
+
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+
+    <!-- ====================== Chatbot HTML ======================= -->
+    <!-- Floating Icon (initially visible) -->
+    <div class="chatbot-float-icon" id="chatbotFloatIcon">
+        <span>💬</span>
+    </div>
+
+    <!-- Hidden field for the authenticated username -->
+    <input type="hidden" id="chatbotUsername" th:value="${#authentication?.principal?.username}" />
+
+    <!-- Chatbot Window (initially hidden) -->
+    <div class="chatbot-window" id="chatbotWindow" style="display: none;">
+        <!-- Header -->
+        <div class="chatbot-header">
+            <h2 class="chatbot-title">Ask Abebech</h2>
+            <button class="chatbot-close-btn" id="chatbotCloseBtn">&times;</button>
+        </div>
+
+        <!-- Scrollable Messages Container -->
+        <div class="chatbot-messages" id="chatbotMessages">
+            <!-- Default welcome message for an empty chat -->
+            <div class="chatbot-message bot-msg" id="chatbotWelcomeMsg">
+                <span >
+                    Hello! I'm Abebech. I'm here to help with anything AAU-related.
+                    Ask me your questions or explore more on our
+                    <a href="https://www.aau.edu.et" target="_blank">website</a>.
+                </span>
+            </div>
+        </div>
+
+        <!-- Typing Indicator -->
+        <div class="chatbot-typing-indicator" id="chatbotTypingIndicator" style="display: none;">
+            Abebech is typing...
+        </div>
+
+        <!-- Error Message (hidden by default) -->
+        <div class="chatbot-error" id="chatbotErrorMessage" style="display: none;"></div>
+
+        <!-- Input & Send Button -->
+        <div class="chatbot-input-area">
+            <textarea class="chatbot-textarea" id="chatbotInput" placeholder="Type your message..." rows="1"></textarea>
+            <button class="chatbot-send-btn" id="chatbotSendBtn" type="button" disabled>
+                Send
+            </button>
+        </div>
+    </div>
+
+    <!-- ====================== External Libraries for Markdown ======================= -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/dompurify/dist/purify.min.js"></script>
+
+    <!-- ====================== Chatbot JS ======================= -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Select elements
+            const floatIcon = document.getElementById('chatbotFloatIcon');
+            const chatWindow = document.getElementById('chatbotWindow');
+            const closeBtn = document.getElementById('chatbotCloseBtn');
+            const messagesContainer = document.getElementById('chatbotMessages');
+            const welcomeMsg = document.getElementById('chatbotWelcomeMsg');
+            const typingIndicator = document.getElementById('chatbotTypingIndicator');
+            const errorMessage = document.getElementById('chatbotErrorMessage');
+            const textarea = document.getElementById('chatbotInput');
+            const sendBtn = document.getElementById('chatbotSendBtn');
+            const usernameField = document.getElementById('chatbotUsername');
+
+            // Chat endpoint (adjust if needed)
+            const chatEndpointBase = "https://ugg4ooccg8gws0cwc8g04ko0.loki.vanhansewijck.com/api/chat";
+
+            // 1) Show/Hide Chat Window
+            floatIcon.addEventListener('click', () => {
+                chatWindow.style.display = 'flex';
+                floatIcon.style.display = 'none';
+                textarea.focus();
+            });
+            closeBtn.addEventListener('click', () => {
+                chatWindow.style.display = 'none';
+                floatIcon.style.display = 'flex';
+            });
+
+            // 2) Enable Send Button & Auto-resize the textarea
+            textarea.addEventListener('input', handleInputChange);
+            function handleInputChange() {
+                // Enable/disable send button
+                sendBtn.disabled = (textarea.value.trim().length === 0);
+
+                // Auto-resize logic
+                textarea.style.height = 'auto';
+                textarea.style.height = (textarea.scrollHeight) + 'px';
+
+                // Cap at 4 lines (line-height ~1.4 => ~6.5em for 4 lines)
+                const maxHeight = parseFloat(window.getComputedStyle(textarea).lineHeight) * 4;
+                if (textarea.scrollHeight > maxHeight) {
+                    textarea.style.height = maxHeight + 'px';
+                    textarea.style.overflowY = 'auto';
+                } else {
+                    textarea.style.overflowY = 'hidden';
+                }
+            }
+
+            // 3) Send Message
+            sendBtn.addEventListener('click', sendMessage);
+
+            async function sendMessage() {
+                const userText = textarea.value.trim();
+                if (!userText) return; // do nothing if empty
+
+                // If there's a welcome msg present, remove it
+                if (welcomeMsg) {
+                    welcomeMsg.remove();
+                }
+
+                const username = usernameField ? usernameField.value.trim() : "anonymous";
+
+                // 3.1) Display user message
+                addMessageBubble(userText, "user");
+
+                // 3.2) Clear input
+                textarea.value = "";
+                sendBtn.disabled = true;
+                textarea.style.height = 'auto'; // reset height after sending
+
+                // 3.3) Show typing indicator, hide error
+                typingIndicator.style.display = 'block';
+                errorMessage.style.display = 'none';
+
+                try {
+                    // Prepare payload
+                    const payload = { content: userText };
+                    const encodedUsername = encodeURIComponent(username);
+
+                    // POST request
+                    const response = await fetch(`${chatEndpointBase}/${encodedUsername}`, {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify(payload)
+                    });
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    const data = await response.json();
+
+                    // 3.4) Hide typing indicator
+                    typingIndicator.style.display = 'none';
+
+                    // 3.5) Parse bot response (markdown -> HTML)
+                    const botText = data.content || "(No response)";
+                    addMessageBubble(botText, "bot", true); // pass true to parse as markdown
+                } catch (err) {
+                    typingIndicator.style.display = 'none';
+                    errorMessage.textContent = "Oops, something went wrong. Please try again.";
+                    errorMessage.style.display = 'block';
+                }
+            }
+
+            // 4) Create a message bubble
+            /**
+             * 
+             * @param {string} text the message text
+             * @param {"user" | "bot"} role user or bot
+             * @param {boolean} parseMD if true, parse text as markdown
+             */
+            function addMessageBubble(text, role, parseMD = false) {
+                const msgDiv = document.createElement('div');
+                msgDiv.classList.add('chatbot-message');
+                msgDiv.classList.add(role === "user" ? 'user-msg' : 'bot-msg');
+
+                // If parseMD is true => convert from markdown to sanitized HTML
+                let finalHTML = text;
+                if (parseMD) {
+                    const rawHTML = marked.parse(text); // convert markdown to HTML
+                    finalHTML = DOMPurify.sanitize(rawHTML);
+                }
+
+                const span = document.createElement('span');
+                span.classList.add('chatbot-message-text');
+                // Insert as HTML if parseMD, else plain text
+                if (parseMD) {
+                    span.innerHTML = finalHTML;
+                } else {
+                    span.textContent = text;
+                }
+
+                msgDiv.appendChild(span);
+                messagesContainer.appendChild(msgDiv);
+
+                // Auto-scroll
+                messagesContainer.scrollTop = messagesContainer.scrollHeight;
+            }
+        });
+    </script>
+</div>

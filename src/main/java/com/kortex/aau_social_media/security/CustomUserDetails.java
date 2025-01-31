@@ -50,5 +50,4 @@ public class CustomUserDetails implements UserDetails {
         return user.getUniversityId();
     }
 
-    // Add more as needed
 }

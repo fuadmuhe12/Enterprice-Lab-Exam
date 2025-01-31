@@ -5,7 +5,9 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Data
@@ -31,16 +33,15 @@ public class Announcement {
     private String imageUrl; // <-- NEW: store the URL of the uploaded image
 
     // A set of user names or IDs that liked the announcement
+    
     @ElementCollection
     @CollectionTable(name = "announcement_likes", joinColumns = @JoinColumn(name = "announcement_id"))
     @Column(name = "username")
     private Set<String> likedBy = new HashSet<>();
 
-    // Bi-directional or uni-directional relationship with comments
-    // If you prefer storing comments separately, you can omit mappedBy and store in
-    // a separate table.
-    @OneToMany(mappedBy = "announcement", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    private Set<Comment> comments = new HashSet<>();
+    // Add proper cascade configuration for relationships
+    @OneToMany(mappedBy = "announcement", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Comment> comments = new ArrayList<>();
 
     // Add this helper method for bidirectional relationship
     public void addComment(Comment comment) {

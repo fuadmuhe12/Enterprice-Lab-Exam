@@ -1,27 +1,201 @@
-<!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
-<head>
-    <meta charset="UTF-8">
-</head>
-
-<body>
-    <!-- Navbar Fragment -->
-    <nav th:fragment="navbar"  class="navbar">
-        <div class="container">
-            <a href="/home" class="logo">Your App</a>
-            <div class="nav-items">
-                <span sec:authentication="name" class="username"></span>
-                <form th:action="@{/auth/logout}" method="post" class="logout-form">
-                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
-                    <button type="submit" class="logout-btn">Logout</button>
-                </form>
-    
-                <a href="/home/discussion"><button type="submit" class="logout-btn">discussion</button></a>
-                <a href="/announcements"><button type="submit" class="logout-btn">Announcement</button></a>
+<!-- Navbar Fragment -->
+<div th:fragment="navbar">
+    <style>
+        /* ==============================
+             * Kortex Navbar Styles
+             * ============================== */
+        .kortex-navbar {
+            /* A slight gradient background for a modern vibe */
+            background: linear-gradient(135deg, #ffffff 40%, #f3f4f6 100%);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 0.5rem 1rem;
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        .kortex-nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        /* Logo */
+        .kortex-nav-logo {
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: #2563eb;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        
+        .kortex-nav-logo:hover {
+            color: #1d4ed8;
+        }
+        
+        /* Nav Items */
+        .kortex-nav-items {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+        
+        /* Buttons / Links in Navbar */
+        .kortex-nav-btn {
+            background: #ffffff;
+            color: #1f2937;
+            border: none;
+            padding: 0.6rem 1.2rem;
+            border-radius: 0.375rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            font-size: 0.875rem;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+        
+        .kortex-nav-btn:hover {
+            background: #e5e7eb;
+            color: #111827;
+        }
+        
+        /* Profile Section */
+        .kortex-profile-section {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            position: relative;
+            cursor: pointer;
+        }
+        
+        .kortex-profile-pic {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid #e5e7eb;
+            transition: border-color 0.3s ease, transform 0.3s ease;
+        }
+        
+        .kortex-profile-pic:hover {
+            border-color: #2563eb;
+            transform: scale(1.05);
+        }
+        
+        .kortex-profile-name {
+            font-weight: 500;
+            color: #1f2937;
+        }
+        
+        /* Dropdown Menu */
+        .kortex-dropdown-menu {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background: #ffffff;
+            border-radius: 0.5rem;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+            padding: 0.5rem;
+            min-width: 200px;
+            display: none;
+            animation: fadeIn 0.3s ease forwards;
+        }
+        
+        .kortex-dropdown-menu.show {
+            display: block;
+        }
+        
+        .kortex-dropdown-item {
+            padding: 0.75rem 1rem;
+            color: #4b5563;
+            text-decoration: none;
+            display: block;
+            border-radius: 0.25rem;
+            transition: background 0.3s ease, color 0.3s ease;
+        }
+        
+        .kortex-dropdown-item:hover {
+            background: #f3f4f6;
+            color: #111827;
+        }
+        
+        /* FadeIn animation for dropdown */
+        @keyframes fadeIn {
+            0% {
+                opacity: 0;
+                transform: translateY(-5px);
+            }
+        
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .kortex-nav-items {
+                gap: 1rem;
+            }
+        
+            .kortex-profile-name {
+                display: none;
+            }
+        }
+    </style>
+    <nav  class="kortex-navbar">
+        
+        <div class="kortex-nav-container">
+            <a href="/home" class="kortex-nav-logo"> AAU Connect</a>
+            <div class="kortex-nav-items">
+                <a href="/home/discussion" class="kortex-nav-btn">Discussions</a>
+                <a href="/announcements" class="kortex-nav-btn">Announcements</a>
+                <!-- Profile Section -->
+                <div class="kortex-profile-section" onclick="toggleKortexDropdown()">
+                    <img th:src="${#authentication.principal.profilePic}" alt="Profile Picture"
+                        class="kortex-profile-pic"
+                        onerror="this.src='https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png'">
+                    <span class="kortex-profile-name" sec:authentication="principal.name"></span>
+                    <!-- Dropdown Menu -->
+                    <div class="kortex-dropdown-menu" id="kortexProfileDropdown">
+                        <!-- <a href="/profile" class="kortex-dropdown-item">My Profile</a>
+                        <a href="/settings" class="kortex-dropdown-item">Settings</a> -->
+                        <form th:action="@{/auth/logout}" method="post" class="kortex-dropdown-item"
+                            style="padding: 0;">
+                            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+                            <button type="submit"
+                                style="all: unset; padding: 0.75rem 1rem; display: block; width: 100%; cursor: pointer;">
+                                Logout
+                            </button>
+                        </form>
+                    </div>
+                </div>
             </div>
         </div>
     </nav>
-</body>
+    <script>
+        // Dropdown Toggle
+        function toggleKortexDropdown() {
+            const dropdown = document.getElementById('kortexProfileDropdown');
+            dropdown.classList.toggle('show');
+        }
 
-</html>
+        // Close dropdown when clicking outside
+        window.addEventListener('click', function (event) {
+            if (!event.target.closest('.kortex-profile-section')) {
+                const dropdowns = document.getElementsByClassName("kortex-dropdown-menu");
+                for (let i = 0; i < dropdowns.length; i++) {
+                    const openDropdown = dropdowns[i];
+                    if (openDropdown.classList.contains('show')) {
+                        openDropdown.classList.remove('show');
+                    }
+                }
+            }
+        });
+    </script>
+</div>

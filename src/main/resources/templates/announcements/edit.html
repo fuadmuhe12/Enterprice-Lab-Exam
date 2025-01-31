@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head>
+    <title>Edit Announcement</title>
+    <!-- Include your CSS or <style> block here -->
+
+    <!-- (Optional) Google Font Import -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
+
+    <style>
+        /****************************************
+             * Global & Body
+             ****************************************/
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: "Poppins", sans-serif;
+            background-color: #f5f7fa;
+            color: #1f2937;
+        }
+
+        /****************************************
+             * Main Container
+             ****************************************/
+        .edit-announcement-main {
+            max-width: 800px;
+            margin: 5rem auto 2rem;
+            /* top margin to avoid overlapping with navbar */
+            padding: 1rem;
+        }
+
+        /****************************************
+             * Header & Title
+             ****************************************/
+        .edit-announcement-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .edit-announcement-title {
+            font-size: 2rem;
+            font-weight: 600;
+            color: #2b2b2b;
+            position: relative;
+        }
+
+        /* Decorative line/gradient below the title */
+        .edit-announcement-title::after {
+            content: "";
+            display: block;
+            width: 60px;
+            height: 4px;
+            background: linear-gradient(90deg, #2563eb, #3b82f6);
+            margin: 0.5rem auto 0;
+            border-radius: 2px;
+        }
+
+        /****************************************
+             * Form Section
+             ****************************************/
+        .edit-announcement-section {
+            background: #ffffff;
+            border-radius: 0.5rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            padding: 2rem;
+        }
+
+        .edit-announcement-form {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        /****************************************
+             * Field Groups
+             ****************************************/
+        .edit-field-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .edit-label {
+            font-weight: 600;
+            font-size: 0.95rem;
+            color: #374151;
+        }
+
+        .edit-input-text,
+        .edit-textarea,
+        .edit-input-file {
+            padding: 0.75rem;
+            font-size: 0.95rem;
+            border: 1px solid #e5e7eb;
+            border-radius: 0.25rem;
+            outline: none;
+            transition: border-color 0.3s ease;
+        }
+
+        .edit-input-text:focus,
+        .edit-textarea:focus,
+        .edit-input-file:focus {
+            border-color: #2563eb;
+        }
+
+        .edit-textarea {
+            resize: vertical;
+            /* allow vertical resizing only */
+        }
+
+        .edit-error-msg {
+            color: #b91c1c;
+            font-size: 0.875rem;
+        }
+
+        /****************************************
+             * Existing Image Preview
+             ****************************************/
+        .edit-current-image {
+            margin-bottom: 0.5rem;
+        }
+
+        .edit-preview-img {
+            max-width: 200px;
+            border-radius: 0.25rem;
+            border: 1px solid #e5e7eb;
+        }
+
+        /****************************************
+             * Action Buttons
+             ****************************************/
+        .edit-action-buttons {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        /* Update Button */
+        .edit-submit-btn {
+            background: linear-gradient(135deg, #3b82f6, #2563eb);
+            color: #ffffff;
+            border: none;
+            padding: 0.75rem 1.25rem;
+            border-radius: 0.375rem;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background 0.3s ease;
+        }
+
+        .edit-submit-btn:hover {
+            background: linear-gradient(135deg, #2563eb, #1d4ed8);
+        }
+
+        /* Cancel Link (styled like a button) */
+        .edit-cancel-btn {
+            display: inline-block;
+            text-decoration: none;
+            color: #1f2937;
+            background: #e5e7eb;
+            padding: 0.75rem 1.25rem;
+            border-radius: 0.375rem;
+            transition: background 0.3s ease, color 0.3s ease;
+            font-weight: 500;
+        }
+
+        .edit-cancel-btn:hover {
+            background: #d1d5db;
+            color: #111827;
+        }
+
+        /****************************************
+             * Responsive Design
+             ****************************************/
+        @media (max-width: 768px) {
+            .edit-announcement-section {
+                padding: 1.5rem;
+            }
+
+            .edit-announcement-main {
+                margin-top: 4rem;
+                /* slightly less top margin on mobile */
+            }
+        }
+    </style>
+
+</head>
+
+<body>
+    <!-- Navbar (fragment) -->
+    <nav th:replace="~{fragments/navbar :: navbar}"></nav>
+
+    <!-- Main Container for Edit Page -->
+    <main class="edit-announcement-main">
+        <!-- Page Title -->
+        <header class="edit-announcement-header">
+            <h1 class="edit-announcement-title">Edit Announcement</h1>
+        </header>
+
+        <!-- Form Section -->
+        <section class="edit-announcement-section">
+            <form th:action="@{/announcements/{id}(id=${updateDTO.id})}" th:object="${updateDTO}" method="post"
+                enctype="multipart/form-data" class="edit-announcement-form">
+                <!-- Hidden Fields -->
+                <input type="hidden" th:field="*{id}" />
+                <input type="hidden" th:field="*{existingImageUrl}" />
+
+                <!-- Title Field -->
+                <div class="edit-field-group">
+                    <label for="titleField" class="edit-label">Title</label>
+                    <input id="titleField" type="text" th:field="*{title}" class="edit-input-text"
+                        placeholder="Enter announcement title" />
+                    <p th:if="${#fields.hasErrors('title')}" th:errors="*{title}" class="edit-error-msg"></p>
+                </div>
+
+                <!-- Content Field -->
+                <div class="edit-field-group">
+                    <label for="contentField" class="edit-label">Content</label>
+                    <textarea id="contentField" th:field="*{content}" class="edit-textarea" rows="4"
+                        placeholder="Enter announcement content"></textarea>
+                    <p th:if="${#fields.hasErrors('content')}" th:errors="*{content}" class="edit-error-msg"></p>
+                </div>
+
+                <!-- Image Field -->
+                <div class="edit-field-group">
+                    <label class="edit-label">Current Image</label>
+                    <div class="edit-current-image">
+                        <img th:if="${updateDTO.existingImageUrl}" th:src="${updateDTO.existingImageUrl}"
+                            alt="Current Announcement Image" class="edit-preview-img" />
+                    </div>
+                    <label for="imageFileField" class="edit-label">Replace Image</label>
+                    <input id="imageFileField" type="file" th:field="*{imageFile}" accept="image/*"
+                        class="edit-input-file" />
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="edit-action-buttons">
+                    <button type="submit" class="edit-submit-btn">Update</button>
+                    <a th:href="@{/announcements}" class="edit-cancel-btn">Cancel</a>
+                </div>
+            </form>
+        </section>
+    </main>
+    <div th:replace="~{fragments/chatbot :: chatbot}"></div>
+</body>
+
+</html>

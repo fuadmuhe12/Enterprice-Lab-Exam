@@ -2,187 +2,475 @@
 <html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
 <head>
-    <title>Announcements</title>
+    <!-- Optional: Google Fonts import -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
+
     <style>
-        /* Announcements Page Styles */
-        .announcement-form {
-            background: #f8f9fa;
-            padding: 20px;
-            border-radius: 8px;
-            margin-bottom: 30px;
+        /****************************************
+         * Global & Layout
+         ****************************************/
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
-    
-        .form-group {
-            margin-bottom: 15px;
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            /* Fallback to a more standard font if needed */
+            background: #f5f7fa;
+            color: #1f2937;
+            /* dark gray text */
         }
-    
-        .form-control {
+
+        /* Container for the entire page (below the navbar) */
+        .amaze-main-container {
+            max-width: 1200px;
+            margin: 5rem auto 2rem;
+            /* top margin to avoid overlap with fixed navbar */
+            padding: 0 1rem;
+        }
+
+        .amaze-page-title {
+            font-size: 2rem;
+            font-weight: 600;
+            margin-bottom: 2rem;
+            text-align: center;
+            color: #2b2b2b;
+            position: relative;
+        }
+
+        .amaze-page-title::after {
+            content: "";
+            display: block;
+            width: 60px;
+            height: 4px;
+            background: linear-gradient(90deg, #2563eb, #3b82f6);
+            margin: 0.5rem auto 0;
+            border-radius: 2px;
+        }
+
+
+        /****************************************
+         * Announcement Creation (Admin section)
+         ****************************************/
+        .amaze-create-announcement {
+            background: #ffffff;
+            border-radius: 0.5rem;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        }
+
+        .amaze-field-group {
+            margin-bottom: 1rem;
+        }
+
+        .amaze-field-group input[type="text"],
+        .amaze-field-group textarea,
+        .amaze-field-group input[type="file"] {
             width: 100%;
-            padding: 8px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
+            padding: 0.75rem;
+            border: 1px solid #e5e7eb;
+            border-radius: 0.25rem;
+            font-size: 1rem;
+            outline: none;
+            transition: border-color 0.3s ease;
         }
-    
-        .btn-primary {
-            background-color: #007bff;
-            color: white;
-            padding: 10px 20px;
+
+        .amaze-field-group input[type="text"]:focus,
+        .amaze-field-group textarea:focus,
+        .amaze-field-group input[type="file"]:focus {
+            border-color: #2563eb;
+        }
+
+        .amaze-field-group p[th\\:if] {
+            color: #b91c1c;
+            /* error color */
+            margin-top: 0.25rem;
+            font-size: 0.875rem;
+        }
+
+        .amaze-btn-post {
+            background: linear-gradient(135deg, #3b82f6, #2563eb);
+            color: #ffffff;
             border: none;
-            border-radius: 4px;
+            padding: 0.75rem 1.25rem;
+            border-radius: 0.375rem;
             cursor: pointer;
+            font-weight: 600;
+            transition: background 0.3s ease;
         }
-    
-        .announcement-card {
-            background: white;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            margin-bottom: 20px;
+
+        .amaze-btn-post:hover {
+            background: linear-gradient(135deg, #2563eb, #1d4ed8);
         }
-    
-        .meta {
-            color: #6c757d;
-            font-size: 0.9em;
-            margin-bottom: 10px;
+
+
+        /****************************************
+         * Announcements List
+         ****************************************/
+        .amaze-announcement-list {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2rem;
         }
-    
-        .interaction-buttons {
-            margin: 15px 0;
+
+        /* Each Card (Announcement) */
+        .amaze-announcement-card {
+            background: #ffffff;
+            border-radius: 0.5rem;
+            padding: 1.5rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            opacity: 0;
+            /* start invisible for fade-in effect */
+            transform: translateY(20px);
+            /* slightly moved down for fade-in effect */
+            transition: all 0.6s ease;
+            /* fade-in animation timing */
         }
-    
-        .like-btn {
-            background: none;
-            border: none;
-            cursor: pointer;
-            font-size: 1.2em;
-            padding: 5px 10px;
+
+        /* The 'reveal' class is applied by JS when in viewport */
+        .amaze-announcement-card.amaze-reveal {
+            opacity: 1;
+            transform: translateY(0);
         }
-    
-        .comments-section {
-            margin-top: 15px;
-            border-top: 1px solid #eee;
-            padding-top: 15px;
-        }
-    
-        .comment {
-            background: #f8f9fa;
-            padding: 10px;
-            border-radius: 4px;
-            margin-bottom: 10px;
-        }
-    
-        .comment-form {
+
+        /********** Card Header **********/
+        .amaze-card-header {
             display: flex;
-            gap: 10px;
-            margin-top: 15px;
+            align-items: center;
+            justify-content: space-between;
         }
-    
-        .comment-input {
-            flex-grow: 1;
-            padding: 8px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
+
+        .amaze-card-header h3 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            margin-right: 1rem;
         }
-    
-        .comment-btn {
-            background-color: #28a745;
-            color: white;
+
+        /* Admin actions: Edit & Delete */
+        .amaze-card-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .amaze-edit-btn,
+        .amaze-delete-btn {
+            display: inline-block;
+            font-size: 1.1rem;
+            background: transparent;
             border: none;
-            padding: 8px 15px;
-            border-radius: 4px;
             cursor: pointer;
         }
-    
-        .error {
-            color: #dc3545;
-            font-size: 0.9em;
-            margin-top: 5px;
+
+        .amaze-edit-btn {
+            color: #10b981;
+            /* greenish for edit */
+        }
+
+        .amaze-edit-btn:hover {
+            color: #059669;
+        }
+
+        .amaze-delete-form {
+            display: inline;
+        }
+
+        .amaze-delete-btn {
+            color: #ef4444;
+            /* redish for delete */
+        }
+
+        .amaze-delete-btn:hover {
+            color: #dc2626;
+        }
+
+        /********** Card Meta Info **********/
+        .amaze-card-meta {
+            font-size: 0.875rem;
+            color: #6b7280;
+            /* mid-gray */
+            margin-bottom: 1rem;
+        }
+
+        /********** Card Body (text + image) **********/
+        .amaze-card-body p {
+            line-height: 1.6;
+            margin-bottom: 1rem;
+        }
+
+        .amaze-card-image img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            border-radius: 0.25rem;
+        }
+
+        /********** Like Button **********/
+        .amaze-card-like {
+            margin: 1rem 0;
+        }
+
+        .amaze-like-btn {
+            background: transparent;
+            border: none;
+            font-size: 1.25rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+
+        .amaze-like-btn:hover {
+            opacity: 0.8;
+        }
+
+        /****************************************
+         * Comments Section
+         ****************************************/
+        .amaze-comments-section {
+            margin-top: 1rem;
+            border-top: 1px solid #e5e7eb;
+            padding-top: 1rem;
+        }
+
+        .amaze-comment-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .amaze-comment-pic {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .amaze-comment-item strong {
+            font-weight: 600;
+        }
+
+        .amaze-comment-item span {
+            margin: 0 0.5rem;
+        }
+
+        .amaze-comment-item small {
+            color: #9ca3af;
+            /* light gray */
+        }
+
+        /* New Comment Form */
+        .amaze-comment-form {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .amaze-comment-form input[type="text"] {
+            flex: 1;
+            padding: 0.5rem;
+            border: 1px solid #e5e7eb;
+            border-radius: 0.25rem;
+            outline: none;
+            transition: border-color 0.3s ease;
+        }
+
+        .amaze-comment-form input[type="text"]:focus {
+            border-color: #2563eb;
+        }
+
+        .amaze-comment-form p[th\\:if] {
+            flex: 1 0 100%;
+            color: #b91c1c;
+            font-size: 0.875rem;
+        }
+
+        .amaze-comment-btn {
+            background: #2563eb;
+            color: #ffffff;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 0.25rem;
+            cursor: pointer;
+            font-weight: 500;
+            transition: background 0.3s ease;
+        }
+
+        .amaze-comment-btn:hover {
+            background: #1d4ed8;
+        }
+
+        /****************************************
+         * Responsive Design
+         ****************************************/
+        @media (max-width: 768px) {
+            .amaze-main-container {
+                margin-top: 4rem;
+                /* smaller top margin on mobile */
+            }
+
+            .amaze-card-header h3 {
+                margin-bottom: 0.3rem;
+            }
         }
     </style>
+
+    <script>
+        /********************************************
+         * JS for Reveal on Scroll (IntersectionObserver)
+         ********************************************/
+        document.addEventListener('DOMContentLoaded', () => {
+            const announcementCards = document.querySelectorAll('.amaze-announcement-card');
+
+            const observerOptions = {
+                root: null,
+                rootMargin: '0px',
+                threshold: 0.1
+            };
+
+            // Reveal function
+            function revealOnEntry(entries, observer) {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('amaze-reveal');
+                        observer.unobserve(entry.target); // optional: stop observing once revealed
+                    }
+                });
+            }
+
+            // Intersection Observer
+            const observer = new IntersectionObserver(revealOnEntry, observerOptions);
+
+            announcementCards.forEach(card => {
+                observer.observe(card);
+            });
+        });
+    </script>
 </head>
 
+
 <body>
+    <!-- Navbar -->
     <nav th:replace="~{fragments/navbar :: navbar}"></nav>
 
-    <div class="container">
-        <h1>Announcements</h1>
+    <!-- Main Container -->
+    <div class="amaze-main-container">
+        <h1 class="amaze-page-title">Announcements</h1>
 
-        <!-- Announcement Creation Form -->
-        <div sec:authorize="hasAuthority('ADMIN')" class="announcement-form">
-            <!-- Important: Add enctype="multipart/form-data" -->
-            <form th:action="@{/announcements}" th:object="${announcementDTO}" method="post" enctype="multipart/form-data">
-        
-                <div class="form-group">
-                    <input type="text" th:field="*{title}" placeholder="Announcement title" class="form-control">
-                    <p th:if="${#fields.hasErrors('title')}" th:errors="*{title}" class="error"></p>
+        <!-- (1) Announcement Creation (Admins Only) -->
+        <section sec:authorize="hasRole('ADMIN')" class="amaze-create-announcement">
+            <form th:action="@{/announcements}" th:object="${announcementDTO}" method="post"
+                enctype="multipart/form-data">
+
+                <!-- Title -->
+                <div class="amaze-field-group">
+                    <input type="text" th:field="*{title}" placeholder="Announcement title" />
+                    <p th:if="${#fields.hasErrors('title')}" th:errors="*{title}"></p>
                 </div>
-        
-                <div class="form-group">
-                    <textarea th:field="*{content}" placeholder="Announcement content" class="form-control" rows="4"></textarea>
-                    <p th:if="${#fields.hasErrors('content')}" th:errors="*{content}" class="error"></p>
+
+                <!-- Content -->
+                <div class="amaze-field-group">
+                    <textarea th:field="*{content}" placeholder="Announcement content" rows="4"></textarea>
+                    <p th:if="${#fields.hasErrors('content')}" th:errors="*{content}"></p>
                 </div>
-        
-                <!-- New file input -->
-                <div class="form-group">
+
+                <!-- Image File -->
+                <div class="amaze-field-group">
                     <input type="file" th:field="*{imageFile}" accept="image/*" />
                 </div>
-        
-                <button type="submit" class="btn-primary">Post Announcement</button>
+
+                <!-- Submit -->
+                <button type="submit" class="amaze-btn-post">Post Announcement</button>
             </form>
-        </div>
+        </section>
 
+        <!-- (2) Announcement List -->
+        <section class="amaze-announcement-list">
+            <!-- Each Announcement Card -->
+            <article th:each="announcement : ${announcements}" class="amaze-announcement-card">
+                <!-- Header (Title + Admin Actions) -->
+                <header class="amaze-card-header">
+                    <h3 th:text="${announcement.title}"></h3>
 
+                    <div class="amaze-card-actions" sec:authorize="hasRole('ADMIN')">
+                        <!-- Edit Button -->
+                        <a th:href="@{/announcements/{id}/edit(id=${announcement.id})}" class="amaze-edit-btn">
+                            ✏️
+                        </a>
 
+                        <!-- Delete Form -->
+                        <form th:action="@{/announcements/{id}/delete(id=${announcement.id})}" method="post"
+                            class="amaze-delete-form">
+                            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+                            <button type="submit" class="amaze-delete-btn" onclick="return confirm('Are you sure?');">
+                                🗑️
+                            </button>
+                        </form>
+                    </div>
+                </header>
 
-        <!-- Announcements List -->
-        <div class="announcements-list">
-            <div th:each="announcement : ${announcements}" class="announcement-card">
-                <h3 th:text="${announcement.title}"></h3>
-                <p class="meta">
-                    Posted by <span th:text="${announcement.createdBy}"></span>
-                    at <span th:text="${#temporals.format(announcement.createdAt, 'dd MMM yyyy HH:mm')}"></span>
+                <!-- Meta Info (Author & Time) -->
+                <p class="amaze-card-meta">
+                    Posted by
+                    <span th:text="${announcement.createdBy}"></span>
+                    at
+                    <span th:text="${#temporals.format(announcement.createdAt, 'dd MMM yyyy HH:mm')}"></span>
                 </p>
-                <p th:text="${announcement.content}"></p>
-            
-                <!-- Display the image if it's available -->
-                <div th:if="${announcement.imageUrl != null}">
-                    <img th:src="${announcement.imageUrl}" alt="Announcement Image" style="max-width: 400px;">
-                </div>
-            
+
+                <!-- Body (Content + Image) -->
+                <section class="amaze-card-body">
+                    <p th:text="${announcement.content}"></p>
+                    <div th:if="${announcement.imageUrl != null}" class="amaze-card-image">
+                        <img th:src="${announcement.imageUrl}" alt="Announcement Image" />
+                    </div>
+                </section>
+
                 <!-- Like Button -->
-                <div class="interaction-buttons">
+                <div class="amaze-card-like">
                     <form th:action="@{/announcements/{id}/like(id=${announcement.id})}" method="post">
                         <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
-                        <button type="submit" class="like-btn">
+                        <button type="submit" class="amaze-like-btn">
                             <span th:text="${#authentication?.principal?.username != null 
-                                          && #sets.contains(announcement.likedBy, #authentication.principal.username) 
-                                          ? '❤️' : '🤍'}"></span>
+                                           && #sets.contains(announcement.likedBy, #authentication.principal.username) 
+                                           ? '❤️' : '🤍'}"></span>
                             <span th:text="${#sets.size(announcement.likedBy)}"></span>
                         </button>
                     </form>
                 </div>
-            
+
                 <!-- Comments Section -->
-                <div class="comments-section">
-                    <div th:each="comment : ${announcement.comments}" class="comment" th:if="${announcement.comments} != null">
-                        <strong th:text="${comment.username}"></strong>:
+                <section class="amaze-comments-section">
+                    <!-- Existing Comments -->
+                    <div th:each="comment : ${announcement.comments}" th:if="${announcement.comments} != null"
+                        class="amaze-comment-item">
+                        <img th:src="${comment.profilePic}" alt="Profile Picture" class="amaze-comment-pic" />
+
+                        <strong th:text="${comment.displayName}"></strong>
                         <span th:text="${comment.text}"></span>
                         <small th:text="${#temporals.format(comment.createdAt, 'dd MMM HH:mm')}"></small>
                     </div>
-            
-                    <!-- Add Comment Form -->
-                    <form th:action="@{/announcements/{id}/comments(id=${announcement.id})}" method="post" class="comment-form"
-                        th:object="${commentDTO}">
-                        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
-                        <input type="text" name="text" placeholder="Write a comment..." class="comment-input" th:field="*{text}">
-                        <p th:if="${#fields.hasErrors('text')}" th:errors="*{text}" class="error"></p>
-                        <button type="submit" class="comment-btn">Post</button>
-                    </form>
-                </div>
-            </div>
 
-        </div>
+                    <!-- Add New Comment -->
+                    <form th:action="@{/announcements/{id}/comments(id=${announcement.id})}" method="post"
+                        class="amaze-comment-form" th:object="${commentDTO}">
+                        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+                        <input type="text" name="text" placeholder="Write a comment..." th:field="*{text}" />
+                        <p th:if="${#fields.hasErrors('text')}" th:errors="*{text}"></p>
+                        <button type="submit" class="amaze-comment-btn">Post</button>
+                    </form>
+                </section>
+            </article>
+        </section>
     </div>
+    <div th:replace="~{fragments/chatbot :: chatbot}"></div>
 </body>
+
 
 </html>

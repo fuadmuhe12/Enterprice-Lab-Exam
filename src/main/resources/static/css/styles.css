@@ -1,62 +1,126 @@
-body {
-    font-family: Arial, sans-serif;
+/* ============ Global Resets & Fonts ============ */
+* {
     margin: 0;
-    padding: 20px;
-    background-color: #f4f4f4;
-}
-
-.container {
-    max-width: 400px;
-    margin: 0 auto;
-    background: white;
-    padding: 20px;
-    border-radius: 5px;
-    box-shadow: 0 0 10px rgba(0,0,0,0.1);
-}
-
-.error {
-    color: red;
-    margin-bottom: 10px;
-}
-
-.success {
-    color: green;
-    margin-bottom: 10px;
-}
-
-form div {
-    margin-bottom: 15px;
-}
-
-label {
-    display: block;
-    margin-bottom: 5px;
-}
-
-input {
-    width: 100%;
-    padding: 8px;
+    padding: 0;
     box-sizing: border-box;
 }
 
-button {
-    background-color: #007bff;
-    color: white;
-    padding: 10px 15px;
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #f5f7fa;
+    color: #1f2937;
+}
+
+/* ============ Container ============ */
+.container {
+    max-width: 400px;
+    margin: 5rem auto;
+    background: #ffffff;
+    border-radius: 0.5rem;
+    padding: 2rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.container h2 {
+    text-align: center;
+    margin-bottom: 1.5rem;
+    font-weight: 600;
+}
+
+/* ============ Form Elements ============ */
+.container form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.container label {
+    font-size: 0.9rem;
+    font-weight: 500;
+    margin-bottom: 0.2rem;
+    color: #4b5563;
+}
+
+.container input[type="text"],
+.container input[type="password"] {
+    width: 100%;
+    padding: 0.6rem;
+    border: 1px solid #e5e7eb;
+    border-radius: 0.25rem;
+    font-size: 0.9rem;
+    outline: none;
+    transition: border-color 0.3s ease;
+}
+
+.container input:focus {
+    border-color: #2563eb;
+}
+
+/* ============ Button ============ */
+.container button[type="submit"] {
+    background: linear-gradient(135deg, #3b82f6, #2563eb);
+    color: #ffffff;
     border: none;
-    border-radius: 3px;
+    padding: 0.75rem;
+    border-radius: 0.25rem;
+    font-size: 1rem;
+    font-weight: 600;
     cursor: pointer;
+    transition: background 0.3s ease;
 }
 
-button:hover {
-    background-color: #0056b3;
+.container button[type="submit"]:hover {
+    background: linear-gradient(135deg, #2563eb, #1d4ed8);
 }
 
-a {
-    color: #007bff;
+/* ============ Error & Success Messages ============ */
+.error {
+    background: #fee2e2; /* light red background */
+    color: #b91c1c;      /* dark red text */
+    padding: 0.5rem;
+    border-radius: 0.25rem;
+    margin-bottom: 1rem;
+    font-size: 0.875rem;
+}
+
+.success {
+    background: #dcfce7; /* light green background */
+    color: #166534;      /* dark green text */
+    padding: 0.5rem;
+    border-radius: 0.25rem;
+    margin-bottom: 1rem;
+    font-size: 0.875rem;
+}
+
+/* ============ Links & Paragraphs ============ */
+.container p {
+    margin-top: 1rem;
+    font-size: 0.9rem;
+    text-align: center;
+    color: #6b7280;
+}
+
+.container a {
+    color: #2563eb;
     text-decoration: none;
 }
 
-a:hover {
+.container a:hover {
     text-decoration: underline;
+}
+
+/* ============ Field Wrapper (Optional) ============ */
+/* 
+   If you want to style each field in a "row" more distinctly, 
+   you can wrap your inputs in a .form-group, for instance:
+*/
+.form-group {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 0.5rem;
+}
+
+/* Extra small customization if needed */
+.form-group input {
+    margin-top: 0.3rem;
 }
