@@ -60,6 +60,7 @@ public class AnnouncementService {
                     dto.setUsername(comment.getUsername());
                     dto.setText(comment.getText());
                     dto.setCreatedAt(comment.getCreatedAt());
+                    dto.setId(comment.getId());
 
                     // Lookup the user from userRepository
                     userRepository.findByUsername(comment.getUsername())

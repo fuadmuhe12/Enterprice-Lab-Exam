@@ -1,6 +1,7 @@
 package com.kortex.aau_social_media.controllers;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -8,6 +9,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.kortex.aau_social_media.dto.UserShowDto;
 import com.kortex.aau_social_media.repository.UserRepository;
+import com.kortex.aau_social_media.security.CustomUserDetails;
+import org.springframework.ui.Model;
 
 @RestController
 @RequestMapping("/users")
@@ -39,5 +42,6 @@ public class UserController {
 
         return ResponseEntity.ok(userShowDto);
     }
+
 
 }

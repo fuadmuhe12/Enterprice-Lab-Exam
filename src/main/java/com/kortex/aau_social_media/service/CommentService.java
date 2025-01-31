@@ -2,6 +2,7 @@ package com.kortex.aau_social_media.service;
 
 import com.kortex.aau_social_media.dto.CommentDTO;
 import com.kortex.aau_social_media.dto.CommentShowDto;
+import com.kortex.aau_social_media.dto.CommentUpdateDTO;
 import com.kortex.aau_social_media.model.Announcement;
 import com.kortex.aau_social_media.model.Comment;
 import com.kortex.aau_social_media.repository.AnnouncementRepository;
@@ -68,5 +69,39 @@ public class CommentService {
         comment.setUsername(username);
         comment.setAnnouncement(announcement);
         commentRepository.save(comment);
+    }
+
+    public void updateComment(CommentUpdateDTO updateDTO, String currentUsername) {
+        Comment comment = commentRepository.findById(updateDTO.getCommentId())
+                .orElseThrow(() -> new RuntimeException("Comment not found"));
+
+        // Optional: Check if current user is the author or has admin privileges
+        // We'll assume "ADMIN" means you can edit any comment
+        if (!comment.getUsername().equals(currentUsername)
+                && !userHasAdminRole(currentUsername)) {
+            throw new RuntimeException("You are not allowed to edit this comment.");
+        }
+
+        comment.setText(updateDTO.getNewText());
+        commentRepository.save(comment);
+    }
+
+    public void deleteComment(Long commentId, String currentUsername) {
+        Comment comment = commentRepository.findById(commentId)
+                .orElseThrow(() -> new RuntimeException("Comment not found"));
+
+        // Optional: same check as above
+        if (!comment.getUsername().equals(currentUsername)
+                && !userHasAdminRole(currentUsername)) {
+            throw new RuntimeException("You are not allowed to delete this comment.");
+        }
+
+        commentRepository.delete(comment);
+    }
+
+    private boolean userHasAdminRole(String username) {
+        return userRepository.findByUsername(username)
+                .map(user -> user.getRole().equals("ROLE_ADMIN"))
+                .orElse(false);
     }
 }

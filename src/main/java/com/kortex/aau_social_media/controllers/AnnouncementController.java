@@ -3,6 +3,7 @@ package com.kortex.aau_social_media.controllers;
 import com.kortex.aau_social_media.dto.AnnouncementDTO;
 import com.kortex.aau_social_media.dto.AnnouncementWithCommentsDTO;
 import com.kortex.aau_social_media.dto.CommentDTO;
+import com.kortex.aau_social_media.dto.CommentUpdateDTO;
 import com.kortex.aau_social_media.dto.UpdateAnnouncementDTO;
 import com.kortex.aau_social_media.model.Announcement;
 import com.kortex.aau_social_media.service.AnnouncementService;
@@ -122,6 +123,55 @@ public class AnnouncementController {
             throw new RuntimeException("User not authenticated properly");
         }
         commentService.createComment(id, commentDTO, username);
+        return "redirect:/announcements";
+    }
+
+     // ========== COMMENT UPDATE ==========
+    @PostMapping("/{announcementId}/comments/{commentId}/update")
+    public String updateComment(
+            @PathVariable Long announcementId,
+            @PathVariable Long commentId,
+            @Valid @ModelAttribute("commentUpdateDTO") CommentUpdateDTO updateDTO,
+            BindingResult result,
+            @AuthenticationPrincipal Object principal,
+            Model model) {
+
+        if (result.hasErrors()) {
+            // If we have form errors, re-fetch announcements & comments to display
+            model.addAttribute("announcements", announcementService.getAllAnnouncementsWithComments());
+            return "announcements/list";
+        }
+
+        // Extract current username from principal
+        String username;
+        if (principal instanceof UserDetails) {
+            username = ((UserDetails) principal).getUsername();
+        } else {
+            throw new RuntimeException("User not authenticated properly");
+        }
+
+        // Ensure the DTO has the correct comment ID
+        updateDTO.setCommentId(commentId);
+
+        commentService.updateComment(updateDTO, username);
+        return "redirect:/announcements";
+    }
+
+    // ========== COMMENT DELETE ==========
+    @PostMapping("/{announcementId}/comments/{commentId}/delete")
+    public String deleteComment(
+            @PathVariable Long announcementId,
+            @PathVariable Long commentId,
+            @AuthenticationPrincipal Object principal) {
+
+        String username;
+        if (principal instanceof UserDetails) {
+            username = ((UserDetails) principal).getUsername();
+        } else {
+            throw new RuntimeException("User not authenticated properly");
+        }
+
+        commentService.deleteComment(commentId, username);
         return "redirect:/announcements";
     }
 

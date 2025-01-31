@@ -9,7 +9,8 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class CommentShowDto {
+public class CommentShowDto {   
+    private Long id; // the comment's ID
     private String username; // the user’s 'username' (login)
     private String text; // the actual comment text
     private LocalDateTime createdAt;

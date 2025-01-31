@@ -163,8 +163,8 @@
                     <span class="kortex-profile-name" sec:authentication="principal.name"></span>
                     <!-- Dropdown Menu -->
                     <div class="kortex-dropdown-menu" id="kortexProfileDropdown">
-                        <!-- <a href="/profile" class="kortex-dropdown-item">My Profile</a>
-                        <a href="/settings" class="kortex-dropdown-item">Settings</a> -->
+                         <a href="/profile" class="kortex-dropdown-item">My Profile</a>
+                        <!--<a href="/settings" class="kortex-dropdown-item">Settings</a> -->
                         <form th:action="@{/auth/logout}" method="post" class="kortex-dropdown-item"
                             style="padding: 0;">
                             <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
