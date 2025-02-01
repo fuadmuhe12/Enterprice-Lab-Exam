@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>AAU Connect - Terms of Service</title>
+    <style>
+        /* =========================
+           GLOBAL RESET & BASE
+        ========================= */
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f3f4f6; /* neutral background */
+            color: #1f2937; /* dark text for readability */
+            overflow-x: hidden; /* hide potential horizontal scroll from SVG shapes */
+        }
+
+        /* =========================
+           KEYFRAME ANIMATIONS
+        ========================= */
+        @keyframes fadeInUp {
+            0% {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        @keyframes fadeAccordion {
+            from { max-height: 0; }
+            to   { max-height: 600px; } /* large enough to accommodate text */
+        }
+
+        /* =========================
+           HEADER SECTION
+        ========================= */
+        .header-section {
+            position: relative;
+            width: 100%;
+            /* You can adjust or swap these colors to better match your brand */
+            background: linear-gradient(45deg, #6a62e4, #9064eb, #b88aea);
+            background-size: 200% 200%;
+            padding: 3rem 1rem 4rem; /* extra bottom padding for the slant overlap */
+            text-align: center;
+            color: #ffffff;
+            margin-top: 30px;
+        }
+        .header-section h1 {
+            font-size: 30px;
+            margin-bottom: 0.75rem;
+            padding-top: 15px;
+        }
+        .header-section p {
+            max-width: 700px;
+            margin: 0.5rem auto 0;
+            line-height: 1.5;
+            font-size: 1rem;
+            margin-bottom: 30px;
+        }
+
+        /* Curved Slant at the Bottom of Header */
+        .header-slant {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 100px;
+            overflow: hidden;
+        }
+        .header-slant svg {
+            display: block;
+            width: 100%;
+            height: 100%;
+        }
+
+        /* =========================
+           ACCORDION CONTAINER
+        ========================= */
+        .tos-container {
+            max-width: 900px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1; /* above the slant shape */
+            animation: fadeInUp 0.8s ease forwards;
+            opacity: 0; /* fadeInUp on load */
+            margin-top: -40px; /* pull the card up to overlap the slant */
+            padding: 2rem 1rem;
+        }
+
+        .tos-card {
+            background-color: #ffffff;
+            border-radius: 0.5rem;
+            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.07);
+            padding: 2rem 1rem;
+        }
+
+        .tos-card h2 {
+            margin-top: 0;
+            margin-bottom: 1rem;
+            text-align: center;
+            font-size: 1.8rem;
+            color: #1f2937;
+        }
+        .tos-card p {
+            max-width: 700px;
+            margin: 0.75rem auto;
+            text-align: center;
+            color: #4b5563;
+        }
+
+        /* =========================
+           ACCORDION STYLES
+        ========================= */
+        .accordion {
+            max-width: 700px;
+            margin: 2rem auto;
+        }
+        .accordion-item {
+            border-bottom: 1px solid #e5e7eb;
+        }
+        .accordion-item:last-child {
+            border-bottom: none;
+        }
+
+        .accordion-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1rem;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .accordion-header:hover {
+            background-color: #f9fafb;
+        }
+        .accordion-header h3 {
+            font-size: 1rem;
+            font-weight: 500;
+            color: #1f2937;
+        }
+
+        .accordion-toggle {
+            font-size: 1.4rem;
+            font-weight: bold;
+            transition: transform 0.3s ease;
+        }
+        .accordion-header.active .accordion-toggle {
+            transform: rotate(45deg);
+        }
+
+        .accordion-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease;
+            padding: 0 1rem;
+        }
+        .accordion-content.open {
+            animation: fadeAccordion 0.4s forwards;
+            border-top: 1px solid #e5e7eb;
+            padding-top: 1rem;
+            padding-bottom: 1rem;
+        }
+        .accordion-content p,
+        .accordion-content ul {
+            font-size: 0.95rem;
+            line-height: 1.5;
+            color: #4b5563;
+            margin-bottom: 1rem;
+        }
+        .accordion-content ul {
+            list-style: disc;
+            margin-left: 1.5rem;
+        }
+
+        /* =========================
+           RESPONSIVE
+        ========================= */
+        @media (max-width: 768px) {
+            .header-section h1 {
+                font-size: 1.5rem;
+            }
+            .tos-card h2 {
+                font-size: 1.4rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- NAVBAR Fragment -->
+    <nav th:replace="~{fragments/navbar :: navbar}"></nav>
+
+    <!-- TOP HEADER SECTION -->
+    <header class="header-section">
+        <h1>Terms of Service</h1>
+        <p>
+            Welcome to AAU Connect. Please read through these terms carefully.
+            By accessing our platform, you agree to be bound by them.
+        </p>
+        <!-- The Slanted SVG at Bottom -->
+        <div class="header-slant">
+            <!-- Updated path for a smoother curve -->
+            <svg viewBox="0 0 1440 320" preserveAspectRatio="none">
+                <path fill="#f3f4f6" fill-opacity="1"
+                      d="M0,224L80,192C160,160,320,96,480,101.3C640,107,800,181,960,192C1120,203,1280,149,1360,122.7L1440,96L1440,320L1360,320C1280,320,1120,320,960,320C800,320,640,320,480,320C320,320,160,320,80,320L0,320Z">
+                </path>
+            </svg>
+        </div>
+    </header>
+
+    <!-- MAIN TOS CARD & ACCORDION -->
+    <section class="tos-container">
+        <div class="tos-card">
+            <h2>AAU Connect - Terms Overview</h2>
+            <p>
+                Below, you’ll find detailed sections regarding usage, responsibilities, 
+                and other important information about AAU Connect.
+            </p>
+            
+            <div class="accordion" id="tosAccordion">
+                <!-- Example Items -->
+                <div class="accordion-item">
+                    <div class="accordion-header">
+                        <h3>1. Acceptance of Terms</h3>
+                        <span class="accordion-toggle">+</span>
+                    </div>
+                    <div class="accordion-content">
+                        <p>
+                            By registering for or using AAU Connect, you acknowledge that you have read, 
+                            understood, and agree to be bound by these Terms of Service.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="accordion-item">
+                    <div class="accordion-header">
+                        <h3>2. Modifications</h3>
+                        <span class="accordion-toggle">+</span>
+                    </div>
+                    <div class="accordion-content">
+                        <p>
+                            We may revise these terms at any time. Please check regularly for updates.
+                            Any significant changes will be communicated appropriately.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="accordion-item">
+                    <div class="accordion-header">
+                        <h3>3. User Accounts</h3>
+                        <span class="accordion-toggle">+</span>
+                    </div>
+                    <div class="accordion-content">
+                        <ul>
+                            <li>Provide accurate and current registration information.</li>
+                            <li>Keep your account password confidential.</li>
+                            <li>Use AAU Connect in a lawful and respectful manner.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="accordion-item">
+                    <div class="accordion-header">
+                        <h3>4. Prohibited Conduct</h3>
+                        <span class="accordion-toggle">+</span>
+                    </div>
+                    <div class="accordion-content">
+                        <p>
+                            You agree not to use the platform for any unlawful, harassing, or harmful activities.
+                            AAU Connect reserves the right to remove or modify any content that violates these terms.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="accordion-item">
+                    <div class="accordion-header">
+                        <h3>5. Intellectual Property</h3>
+                        <span class="accordion-toggle">+</span>
+                    </div>
+                    <div class="accordion-content">
+                        <p>
+                            All content and materials on AAU Connect, including but not limited to text, graphics, 
+                            logos, and software, are owned by AAU Connect or its licensors.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="accordion-item">
+                    <div class="accordion-header">
+                        <h3>6. Termination</h3>
+                        <span class="accordion-toggle">+</span>
+                    </div>
+                    <div class="accordion-content">
+                        <p>
+                            We may suspend or terminate your access if you violate these Terms. 
+                            You may also terminate your account by contacting support.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="accordion-item">
+                    <div class="accordion-header">
+                        <h3>7. Limitation of Liability</h3>
+                        <span class="accordion-toggle">+</span>
+                    </div>
+                    <div class="accordion-content">
+                        <p>
+                            AAU Connect shall not be liable for any indirect, incidental, or consequential damages 
+                            arising from your use of the platform.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="accordion-item">
+                    <div class="accordion-header">
+                        <h3>8. Governing Law</h3>
+                        <span class="accordion-toggle">+</span>
+                    </div>
+                    <div class="accordion-content">
+                        <p>
+                            These Terms of Service are governed by the laws of [Your Jurisdiction]. 
+                            Disputes will be resolved in [Your Jurisdiction] courts.
+                        </p>
+                        <p>
+                            For questions, contact <a href="mailto:support@aauconnect.com">support@aauconnect.com</a>.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CHATBOT Fragment -->
+    <div th:replace="~{fragments/chatbot :: chatbot}"></div>
+
+    <!-- FOOTER Fragment -->
+    <footer th:replace="~{fragments/footer :: footer}"></footer>
+
+    <!-- =========================
+         JS for the Accordion
+         ========================= -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const accordion = document.getElementById('tosAccordion');
+            const headers = accordion.querySelectorAll('.accordion-header');
+
+            headers.forEach(header => {
+                header.addEventListener('click', () => {
+                    const content = header.nextElementSibling;
+                    header.classList.toggle('active');
+                    const toggleIcon = header.querySelector('.accordion-toggle');
+                    
+                    if (content.classList.contains('open')) {
+                        // close
+                        content.classList.remove('open');
+                        content.style.maxHeight = 0;
+                        toggleIcon.textContent = '+';
+                    } else {
+                        // close others
+                        headers.forEach(h => {
+                            if (h !== header) {
+                                h.classList.remove('active');
+                                const c = h.nextElementSibling;
+                                c.classList.remove('open');
+                                c.style.maxHeight = 0;
+                                h.querySelector('.accordion-toggle').textContent = '+';
+                            }
+                        });
+                        // open current
+                        content.classList.add('open');
+                        content.style.maxHeight = content.scrollHeight + "px";
+                        toggleIcon.textContent = '×'; // or rotate '+' if you prefer
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

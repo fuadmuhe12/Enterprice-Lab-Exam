@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>AAU Connect - Privacy Policy</title>
+    <style>
+        /* =========================
+           GLOBAL RESET & BASE
+        ========================= */
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f3f4f6; /* neutral background */
+            color: #1f2937;            /* dark text for readability */
+            overflow-x: hidden;        /* hide horizontal scroll from shape overflows */
+        }
+
+        /* =========================
+           KEYFRAME ANIMATIONS
+        ========================= */
+        @keyframes fadeInUp {
+            0% {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        @keyframes shiftGradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* =========================
+           HEADER SECTION
+        ========================= */
+        .header-section {
+            position: relative;
+            width: 100%;
+            /* Vibrant diagonal gradient background */
+            background: linear-gradient(45deg, #6a62e4, #9064eb, #b88aea);
+            background-size: 200% 200%;
+            padding: 3rem 1rem 4rem; /* add extra bottom padding for wave */
+            text-align: center;
+            color: #ffffff;
+            margin-top: 30px;
+            /* Uncomment to animate the gradient shift
+               animation: shiftGradient 15s ease infinite;
+            */
+        }
+        .header-section h1 {
+            font-size: 30px;
+            margin-bottom: 0.75rem;
+        }
+        .header-section p {
+            max-width: 700px;
+            margin: 0.5rem auto 30px;
+            line-height: 1.5;
+            font-size: 1rem;
+        }
+
+        /* Wave shape at the bottom of the header */
+        .header-wave {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 100px;
+            overflow: hidden;
+        }
+        .header-wave svg {
+            display: block;
+            width: 100%;
+            height: 100%;
+        }
+
+        /* =========================
+           TABS CONTAINER & CARD
+        ========================= */
+        .privacy-container {
+            max-width: 900px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1; /* above wave */
+            animation: fadeInUp 0.8s ease forwards;
+            opacity: 0; /* fade in from below */
+            margin-top: -40px; /* overlap wave by pulling up the container */
+            padding: 2rem 1rem;
+        }
+        .privacy-card {
+            background-color: #ffffff;
+            border-radius: 0.5rem;
+            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.07);
+            padding: 2rem 1rem;
+        }
+        .privacy-card h2 {
+            margin-top: 0;
+            margin-bottom: 1rem;
+            text-align: center;
+            font-size: 1.8rem;
+            color: #1f2937;
+        }
+        .privacy-card p {
+            max-width: 700px;
+            margin: 0.75rem auto 1.5rem;
+            text-align: center;
+            color: #4b5563;
+        }
+
+        /* =========================
+           TABS (Navigation)
+        ========================= */
+        .tabs-nav {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            justify-content: center;
+            margin-bottom: 2rem;
+        }
+        .tab-button {
+            background: #f9fafb;
+            border: none;
+            border-radius: 0.375rem;
+            padding: 0.8rem 1.2rem;
+            font-size: 0.95rem;
+            color: #1f2937;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+        .tab-button.active {
+            background: #6a62e4;
+            color: #fff;
+            transform: scale(1.05);
+        }
+        .tab-button:hover:not(.active) {
+            background-color: #e5e7eb;
+        }
+
+        /* =========================
+           TABS CONTENT
+        ========================= */
+        .tabs-content {
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        .tab-panel {
+            display: none; /* hide all by default */
+            animation: fadeInUp 0.4s ease forwards;
+            opacity: 0; /* start hidden for fadeInUp */
+        }
+        .tab-panel.active {
+            display: block;
+            opacity: 1;
+        }
+        .tab-panel p,
+        .tab-panel ul {
+            margin-bottom: 1rem;
+            line-height: 1.6;
+            color: #4b5563;
+            font-size: 0.95rem;
+        }
+        .tab-panel ul {
+            list-style: disc;
+            margin-left: 1.5rem;
+        }
+
+        /* =========================
+           RESPONSIVE
+        ========================= */
+        @media (max-width: 768px) {
+            .header-section h1 {
+                font-size: 1.5rem;
+            }
+            .privacy-card h2 {
+                font-size: 1.4rem;
+            }
+            .tabs-nav {
+                gap: 0.4rem;
+            }
+            .tab-button {
+                padding: 0.6rem 0.8rem;
+            }
+        }
+        @media (max-width: 520px) {
+            .header-section {
+                padding-top: 50px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- NAVBAR Fragment -->
+    <nav th:replace="~{fragments/navbar :: navbar}"></nav>
+
+    <!-- HEADER SECTION -->
+    <header class="header-section">
+        <h1>Privacy Policy</h1>
+        <p>
+            We care about your privacy and want to be clear on how we collect, use, and protect your data.
+            Below you’ll find different sections of our Privacy Policy.
+        </p>
+        <div class="header-wave">
+            <svg viewBox="0 0 1440 320" preserveAspectRatio="none">
+                <path fill="#f3f4f6" fill-opacity="1"
+                      d="M0,224L80,192C160,160,320,96,480,101.3C640,107,800,181,960,192C1120,203,1280,149,1360,122.7L1440,96L1440,320L1360,320C1280,320,1120,320,960,320C800,320,640,320,480,320C320,320,160,320,80,320L0,320Z">
+                </path>
+            </svg>
+        </div>
+    </header>
+
+    <!-- PRIVACY POLICY (TAB-BASED) -->
+    <section class="privacy-container">
+        <div class="privacy-card">
+            <h2>Managing Your Data with Confidence</h2>
+            <p>
+                Click on each section below to learn more about how we handle your personal information
+                and safeguard your privacy on AAU Connect.
+            </p>
+
+            <!-- Tabs Navigation -->
+            <div class="tabs-nav" id="privacyTabsNav">
+                <button class="tab-button active" data-tab="tab1">Data We Collect</button>
+                <button class="tab-button" data-tab="tab2">How We Use Data</button>
+                <button class="tab-button" data-tab="tab3">Cookies &amp; Tracking</button>
+                <button class="tab-button" data-tab="tab4">Sharing &amp; Disclosure</button>
+                <button class="tab-button" data-tab="tab5">Data Security</button>
+                <button class="tab-button" data-tab="tab6">User Rights</button>
+                <button class="tab-button" data-tab="tab7">Data Retention</button>
+                <button class="tab-button" data-tab="tab8">Contact Us</button>
+            </div>
+
+            <!-- Tabs Content -->
+            <div class="tabs-content">
+                <!-- Tab 1 -->
+                <div id="tab1" class="tab-panel active">
+                    <p><strong>Data We Collect:</strong> We gather information you provide when registering (like name, email), 
+                        as well as usage statistics, device information, and other relevant data you generate while 
+                        using AAU Connect.</p>
+                </div>
+
+                <!-- Tab 2 -->
+                <div id="tab2" class="tab-panel">
+                    <p><strong>How We Use Data:</strong> We utilize your information to enhance our services, personalize 
+                        your experience, and ensure a secure environment for all users.</p>
+                </div>
+
+                <!-- Tab 3 -->
+                <div id="tab3" class="tab-panel">
+                    <p><strong>Cookies &amp; Tracking:</strong> We may employ cookies or similar technologies to analyze 
+                        usage patterns, remember preferences, and improve user experiences.</p>
+                </div>
+
+                <!-- Tab 4 -->
+                <div id="tab4" class="tab-panel">
+                    <p><strong>Sharing &amp; Disclosure:</strong> We do not sell personal data. We only share information 
+                        when legally required or to enable essential services on our behalf.</p>
+                </div>
+
+                <!-- Tab 5 -->
+                <div id="tab5" class="tab-panel">
+                    <p><strong>Data Security:</strong> We apply reasonable measures to protect your information, though 
+                        no method of data transmission is entirely secure.</p>
+                </div>
+
+                <!-- Tab 6 -->
+                <div id="tab6" class="tab-panel">
+                    <p><strong>User Rights:</strong> Depending on your jurisdiction, you may request access, modification, 
+                        or deletion of your personal data. Contact us for more details.</p>
+                </div>
+
+                <!-- Tab 7 -->
+                <div id="tab7" class="tab-panel">
+                    <p><strong>Data Retention:</strong> We keep personal data as long as needed to fulfill the purposes 
+                        described in this policy, unless a longer retention is required by law.</p>
+                </div>
+
+                <!-- Tab 8 -->
+                <div id="tab8" class="tab-panel">
+                    <p><strong>Contact Us:</strong> For further inquiries or concerns about our Privacy Policy, 
+                        email us at <a href="mailto:privacy@aauconnect.com">privacy@aauconnect.com</a>.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CHATBOT Fragment -->
+    <div th:replace="~{fragments/chatbot :: chatbot}"></div>
+
+    <!-- FOOTER Fragment -->
+    <footer th:replace="~{fragments/footer :: footer}"></footer>
+
+    <script>
+        // =========================
+        // JavaScript for Tabs
+        // =========================
+        document.addEventListener('DOMContentLoaded', function() {
+            const nav = document.getElementById('privacyTabsNav');
+            const tabButtons = nav.querySelectorAll('.tab-button');
+            const tabPanels = document.querySelectorAll('.tab-panel');
+
+            // Handle tab click
+            tabButtons.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    // Clear active states
+                    tabButtons.forEach(b => b.classList.remove('active'));
+                    tabPanels.forEach(panel => panel.classList.remove('active'));
+
+                    // Set active on the clicked button
+                    btn.classList.add('active');
+
+                    // Show corresponding tab panel
+                    const targetPanel = document.getElementById(btn.dataset.tab);
+                    targetPanel.classList.add('active');
+                });
+            });
+        });
+    </script>
+</body>
+</html>

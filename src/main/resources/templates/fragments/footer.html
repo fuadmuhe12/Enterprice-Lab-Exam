@@ -1,0 +1,132 @@
+<!-- Footer Fragment -->
+<div th:fragment="footer">
+    <style>
+        /* ==============================
+         * Kortex Footer Styles
+         * ============================== */
+        .kortex-footer {
+            /* Matching gradient background */
+            background: linear-gradient(135deg, #ffffff 40%, #f3f4f6 100%);
+            /* Optional subtle top shadow for separation from page content */
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.05);
+            padding: 1.5rem 1rem;
+            /* Sticky footer positioning */
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            width: 100%;
+            z-index: 100;
+            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        .kortex-footer-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        /* Footer Left (Logo or Title) */
+        .kortex-footer-logo {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #2563eb; /* brand accent color */
+            text-decoration: none;
+        }
+        
+        .kortex-footer-logo:hover {
+            color: #1d4ed8;
+        }
+        
+        /* Footer Nav/Links */
+        .kortex-footer-links {
+            display: flex;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+        }
+        
+        .kortex-footer-links a {
+            text-decoration: none;
+            color: #1f2937; /* dark gray */
+            font-size: 0.875rem;
+            transition: color 0.3s ease;
+        }
+        
+        .kortex-footer-links a:hover {
+            color: #111827;
+        }
+        
+        /* Social Icons / or any other items can go in here */
+        .kortex-footer-social {
+            display: flex;
+            gap: 1rem;
+        }
+        
+        .kortex-social-link {
+            color: #2563eb;
+            font-size: 1.25rem; /* scale if you have icons */
+            transition: color 0.3s ease;
+        }
+        
+        .kortex-social-link:hover {
+            color: #1d4ed8;
+        }
+        
+        /* Copyright / small text */
+        .kortex-footer-copy {
+            font-size: 0.8rem;
+            color: #6b7280; /* medium gray */
+        }
+        
+        /* Responsive handling for smaller screens */
+        @media (max-width: 768px) {
+            .kortex-footer-container {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+        }
+
+        /* Add margin to main content to prevent footer overlap */
+        body {
+            margin-bottom: 150px; /* Adjust based on footer height */
+        }
+    </style>
+    
+    <footer class="kortex-footer">
+        <div class="kortex-footer-container">
+            
+            <!-- Left Section: Logo or Site Name -->
+            <a href="/home" class="kortex-footer-logo">AAU Connect</a>
+            
+            <!-- Center Links: Privacy, Terms, etc. -->
+            <div class="kortex-footer-links">
+                <a href="/privacy">Privacy Policy</a>
+                <a href="/terms">Terms of Service</a>
+                <!-- Add more links as needed -->
+            </div>
+            
+            <!-- Optional Social Section -->
+            <div class="kortex-footer-social">
+                <!-- Example: Font Awesome icons; replace '#' with real links -->
+                <a href="#" class="kortex-social-link" aria-label="Facebook">
+                    <i class="fab fa-facebook-f"></i>
+                </a>
+                <a href="#" class="kortex-social-link" aria-label="Twitter">
+                    <i class="fab fa-twitter"></i>
+                </a>
+                <a href="#" class="kortex-social-link" aria-label="Instagram">
+                    <i class="fab fa-instagram"></i>
+                </a>
+            </div>
+            
+            <!-- Right or Bottom Section: Copyright -->
+            <div class="kortex-footer-copy">
+                &copy; 2025 AAU Connect. All rights reserved.
+            </div>
+        </div>
+    </footer>
+</div>
